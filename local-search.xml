@@ -4,12 +4,37 @@
   
   
   <entry>
+    <title>End&amp;Start</title>
+    <link href="/2024/02/23/End-Start/"/>
+    <url>/2024/02/23/End-Start/</url>
+    
+    <content type="html"><![CDATA[<h1 id="End-Start"><a href="#End-Start" class="headerlink" title="End&amp;Start"></a>End&amp;Start</h1><p>立个 flag：这个周末写点东西～</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Life</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>hello-world</title>
     <link href="/2024/01/25/hello-world/"/>
     <url>/2024/01/25/hello-world/</url>
     
     <content type="html"><![CDATA[<h1 id="Hyphen"><a href="#Hyphen" class="headerlink" title="Hyphen"></a>Hyphen</h1><p>This is a Hello World page</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br><span class="hljs-string">&quot;fmt&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;Hello Wolrd!&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
     
+    
+    <categories>
+      
+      <category>Tech</category>
+      
+    </categories>
     
     
   </entry>
