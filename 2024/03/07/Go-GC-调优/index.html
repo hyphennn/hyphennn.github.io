@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/stdout-nm.png">
 <meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/heap-status-nm.png">
 <meta property="article:published_time" content="2024-03-07T02:54:48.000Z">
-<meta property="article:modified_time" content="2024-03-07T07:18:39.598Z">
+<meta property="article:modified_time" content="2024-03-07T07:23:44.971Z">
 <meta property="article:author" content="hyphen">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/img.png">
@@ -304,8 +304,8 @@
 
 <p>读&amp;写 map</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(e *GCEscapeMap[T])</span></span> Push(k <span class="hljs-type">int</span>, v T) &#123;<br>	idx, ok := e.idxMap[k]<br>	<span class="hljs-keyword">if</span> ok &#123;<br>		e.s[idx] = v<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		e.s[e.realLen] = v<br>		e.realLen++<br>		e.CheckAndScale()<br>	&#125;<br>&#125;<br><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(e *GCEscapeMap[T])</span></span> Get(k <span class="hljs-type">int</span>) (*T, <span class="hljs-type">bool</span>) &#123;<br>	idx, ok := e.idxMap[k]<br>	<span class="hljs-keyword">if</span> ok &#123;<br>		<span class="hljs-keyword">return</span> &amp;e.s[idx], <span class="hljs-literal">true</span><br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, <span class="hljs-literal">false</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<p>e.CheckAndScale(): 此方法用于检测 realLen 和 realCap 的比值，在超过「安全阈值」时会开始告警，在超过「扩容」阈值时会开始主动扩容并告警，如果主动扩容失败，将中止读写 map 交换并告警。 </p>
-<p>需要指出的是，被动扩容是非常危险、代价非常高的操作，因此我们需要尽可能避免其出现：关注实例内存用量；关注 GCEscapeMap 当前用量。</p>
+<p>e.CheckAndScale(): 此方法用于检测 realLen 和 realCap 的比值，在超过「安全阈值」时会开始告警，在超过「扩容阈值」时会开始主动扩容并告警，其原理和 Slice 一致，如果主动扩容失败，将中止读写 map 交换并告警。 </p>
+<p>需要指出的是，主动扩容是非常危险、代价非常高的操作，因此我们需要尽可能避免其出现：关注实例内存用量；关注 GCEscapeMap 当前用量。</p>
 <h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><p>GCEscapeMap 包含以下成员：</p>
 <ul>
 <li>s 是数据真实存储的位置，由于其是直接向 OS 申请的，因此不会被 Runtime 扫描到。</li>
