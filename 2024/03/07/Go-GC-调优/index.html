@@ -16,12 +16,12 @@
   <meta name="author" content="hyphen">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Go GC 调优思路背景FG 是一个纯内存计算服务，其特点是：核心数据使用 sync.map 存储，请求到达服务后，查询 map，进行计算并返回。服务拉起时启动一个协程定时从 DB 获取数据刷新此 map。 当前计算逻辑已优化到最佳，当前最大的性能瓶颈是 GC，由于 map 中存储了大量 k-v 对，且 value 是个复杂结构体，会逃逸到堆上，导致堆上存在大量可达的存活对象，GC Pause 较">
+    <meta name="description" content="Go GC 调优思路背景FG 是一个纯内存计算服务，其特点是：核心数据使用 sync.map 存储，请求到达服务后，查询 map，进行计算并返回。服务拉起时启动一个协程定时从 DB 获取数据刷新此 map。 当前计算逻辑已优化到最佳，当前最大的性能瓶颈是 GC，由于 map 中存储了大量 k-v 对，且 value 是个复杂结构体，会逃逸到堆上，导致堆上存在大量可达的存活对象， GC Pause">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go GC 调优思路">
 <meta property="og:url" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/index.html">
 <meta property="og:site_name" content="Hyphen">
-<meta property="og:description" content="Go GC 调优思路背景FG 是一个纯内存计算服务，其特点是：核心数据使用 sync.map 存储，请求到达服务后，查询 map，进行计算并返回。服务拉起时启动一个协程定时从 DB 获取数据刷新此 map。 当前计算逻辑已优化到最佳，当前最大的性能瓶颈是 GC，由于 map 中存储了大量 k-v 对，且 value 是个复杂结构体，会逃逸到堆上，导致堆上存在大量可达的存活对象，GC Pause 较">
+<meta property="og:description" content="Go GC 调优思路背景FG 是一个纯内存计算服务，其特点是：核心数据使用 sync.map 存储，请求到达服务后，查询 map，进行计算并返回。服务拉起时启动一个协程定时从 DB 获取数据刷新此 map。 当前计算逻辑已优化到最佳，当前最大的性能瓶颈是 GC，由于 map 中存储了大量 k-v 对，且 value 是个复杂结构体，会逃逸到堆上，导致堆上存在大量可达的存活对象， GC Pause">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/img.png">
 <meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/stdout-em.png">
@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/stdout-nm.png">
 <meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/heap-status-nm.png">
 <meta property="article:published_time" content="2024-03-07T02:54:48.000Z">
-<meta property="article:modified_time" content="2024-03-07T06:55:38.229Z">
+<meta property="article:modified_time" content="2024-03-07T06:59:43.525Z">
 <meta property="article:author" content="hyphen">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/img.png">
@@ -275,7 +275,7 @@
               <div class="markdown-body">
                 
                 <h1 id="Go-GC-调优思路"><a href="#Go-GC-调优思路" class="headerlink" title="Go GC 调优思路"></a>Go GC 调优思路</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>FG 是一个纯内存计算服务，其特点是：核心数据使用 sync.map 存储，请求到达服务后，查询 map，进行计算并返回。服务拉起时启动一个协程定时从 DB 获取数据刷新此 map。</p>
-<p>当前计算逻辑已优化到最佳，当前最大的性能瓶颈是 GC，由于 map 中存储了大量 k-v 对，且 value 是个复杂结构体，会逃逸到堆上，导致堆上存在大量可达的存活对象，<br>GC Pause 较长，平均在几 ms 到几百 ms，且出现过 GC Pause 超过 1s 的极端场景。这带来的后果是：单实例吞吐量降低，时延优化受阻，时延毛刺多。</p>
+<p>当前计算逻辑已优化到最佳，当前最大的性能瓶颈是 GC，由于 map 中存储了大量 k-v 对，且 value 是个复杂结构体，会逃逸到堆上，导致堆上存在大量可达的存活对象， GC Pause 较长，平均在几 ms 到几百 ms，且出现过 GC Pause 超过 1s 的极端场景。这带来的后果是：单实例吞吐量降低，时延优化受阻，时延毛刺多。</p>
 <p>特点：高并发，核心读接口QPS100w+，单实例（16C32G） QPS 5k+，低时延：要求核心读接口 P99&lt;1ms。</p>
 <p>目标：优化 GC，降低 GC Pause</p>
 <h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h2><p>使用 Pprof，查看火焰图以及堆使用情况，发现问题根源是堆上的大量存活对象，导致了：</p>
@@ -303,7 +303,8 @@
 
 <p>读&amp;写 map</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(e *GCEscapeMap[T])</span></span> Push(k <span class="hljs-type">int</span>, v T) &#123;<br>	idx, ok := e.idxMap[k]<br>	<span class="hljs-keyword">if</span> ok &#123;<br>		e.s[idx] = v<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		e.s[e.realLen] = v<br>		e.realLen++<br>		e.CheckAndScale()<br>	&#125;<br>&#125;<br><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(e *GCEscapeMap[T])</span></span> Get(k <span class="hljs-type">int</span>) (*T, <span class="hljs-type">bool</span>) &#123;<br>	idx, ok := e.idxMap[k]<br>	<span class="hljs-keyword">if</span> ok &#123;<br>		<span class="hljs-keyword">return</span> &amp;e.s[idx], <span class="hljs-literal">true</span><br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, <span class="hljs-literal">false</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<p>e.CheckAndScale(): 此方法用于检测 realLen 和 realCap 的比值，在超过「安全阈值」时会开始告警，在超过「扩容」阈值时会开始主动扩容并告警，如果主动扩容失败，将中止读写 map 交换并告警。<br>被动扩容是非常危险、代价非常高的操作，因此我们需要尽可能避免其出现：关注实例内存用量；关注 GCEscapeMap 当前用量。</p>
+<p>e.CheckAndScale(): 此方法用于检测 realLen 和 realCap 的比值，在超过「安全阈值」时会开始告警，在超过「扩容」阈值时会开始主动扩容并告警，如果主动扩容失败，将中止读写 map 交换并告警。 </p>
+<p>需要指出的是，被动扩容是非常危险、代价非常高的操作，因此我们需要尽可能避免其出现：关注实例内存用量；关注 GCEscapeMap 当前用量。</p>
 <h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><p>GCEscapeMap 包含以下成员：</p>
 <ul>
 <li>s 是数据真实存储的位置，由于其是直接向 OS 申请的，因此不会被 Runtime 扫描到。</li>
