@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/stdout-nm.png">
 <meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/heap-status-nm.png">
 <meta property="article:published_time" content="2024-03-07T02:54:48.000Z">
-<meta property="article:modified_time" content="2024-03-07T08:52:46.635Z">
+<meta property="article:modified_time" content="2024-03-08T02:59:45.568Z">
 <meta property="article:author" content="hyphen">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/img.png">
@@ -287,7 +287,7 @@
               <div class="markdown-body">
                 
                 <h1 id="面向高性能的-Go-GC-调优思路"><a href="#面向高性能的-Go-GC-调优思路" class="headerlink" title="面向高性能的 Go GC 调优思路"></a>面向高性能的 Go GC 调优思路</h1><h2 id="0"><a href="#0" class="headerlink" title="0"></a>0</h2><p>最简单的优化思路是别浪费时间优化了，转 Rust，R 门！</p>
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>FG 是一个纯内存计算服务，其特点是：核心数据使用 sync.map 存储，请求到达服务后，查询 map，进行计算并返回。服务拉起时启动一个协程定时从 DB 获取数据刷新此 map。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>FG 是一个纯内存计算服务，其特点是：核心数据使用 map 存储，请求到达服务后，查询 map，进行计算并返回。服务拉起时启动一个协程定时从 DB 获取数据刷新此 map。</p>
 <p>计算逻辑已被优化到几乎最佳，当前最大的性能瓶颈是 GC，由于 map 中存储了大量 k-v 对，且 value 是个复杂结构体，会逃逸到堆上，导致堆上存在大量可达的存活对象， GC Pause 较长，平均在几 ms 到几百 ms，且出现过 GC Pause 超过 1s 的极端场景。这带来的后果是：单实例吞吐量降低，时延优化受阻，毛刺多。</p>
 <p>特点：高并发，核心读接口QPS100w+，单实例（16C32G） QPS 5k+，低时延：要求核心读接口 P99&lt;1ms。</p>
 <p>目标：优化 GC，降低 GC Pause</p>
@@ -454,6 +454,41 @@
             </div>
 
             
+  
+  
+    <article id="comments" lazyload>
+      
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'hyphennn/utterances-talk');
+      s.setAttribute('issue-term', 'pathname');
+      
+      s.setAttribute('label', 'utterances');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
           </article>
         </div>
       </div>
