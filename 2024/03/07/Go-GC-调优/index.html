@@ -19,20 +19,20 @@
     <meta name="description" content="高性能的终点是手动管理内存，都 GC 了，还搁这高性能呢🐶">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go GC 调优思路">
-<meta property="og:url" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/index.html">
+<meta property="og:url" content="https://hyphennn.com/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/index.html">
 <meta property="og:site_name" content="Hyphen">
 <meta property="og:description" content="高性能的终点是手动管理内存，都 GC 了，还搁这高性能呢🐶">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/img.png">
-<meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/stdout-em.png">
-<meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/heap-status-em.png">
-<meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/stdout-nm.png">
-<meta property="og:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/heap-status-nm.png">
+<meta property="og:image" content="https://hyphennn.com/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/img.png">
+<meta property="og:image" content="https://hyphennn.com/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/stdout-em.png">
+<meta property="og:image" content="https://hyphennn.com/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/heap-status-em.png">
+<meta property="og:image" content="https://hyphennn.com/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/stdout-nm.png">
+<meta property="og:image" content="https://hyphennn.com/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/heap-status-nm.png">
 <meta property="article:published_time" content="2024-03-07T02:54:48.000Z">
 <meta property="article:modified_time" content="2024-03-12T10:22:41.263Z">
 <meta property="article:author" content="hyphen">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://hyphennn.github.io/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/img.png">
+<meta name="twitter:image" content="https://hyphennn.com/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/img.png">
   
   
   
@@ -74,7 +74,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"hyphennn.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"zXIfIUlxNmOBGqPdQMlxFX0m-gzGzoHsz","app_key":"m3pbUElXBZBIoW8IBUfFPpvZ","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"hyphennn.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"zXIfIUlxNmOBGqPdQMlxFX0m-gzGzoHsz","app_key":"m3pbUElXBZBIoW8IBUfFPpvZ","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -396,7 +396,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Go GC 调优思路</div>
-      <div>http://hyphennn.github.io/2024/03/07/Go-GC-调优/</div>
+      <div>https://hyphennn.com/2024/03/07/Go-GC-调优/</div>
     </div>
     <div class="license-meta">
       
