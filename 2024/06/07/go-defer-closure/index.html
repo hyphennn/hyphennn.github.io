@@ -16,21 +16,21 @@
   <meta name="author" content="hyphennn">
   <meta name="keywords" content="">
   
-    <meta name="description" content=".cd-timeline.svelte-1t2uafz .svelte-1t2uafz,.cd-timeline.svelte-1t2uafz .svelte-1t2uafz::after,.cd-timeline.svelte-1t2uafz .svelte-1t2uafz::before{-webkit-box-sizing:border-box;box-sizing:border-">
+    <meta name="description" content="Go defer+闭包的一个小坑今天在写代码的时候，发现一个奇怪的事情，在将无效的逻辑简化之后，可以总结出这样的一段代码： 1234567func main() &#123;	a :&#x3D; &quot;1&quot;	defer fmt.Println(&quot;defer only: &quot; + a)	defer func() &#123; fmt.Println(&quot;defer c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一些碎碎念">
-<meta property="og:url" content="https://hyphennn.com/1999/10/01/fragment/index.html">
+<meta property="og:title" content="Go defer+闭包的一个小坑">
+<meta property="og:url" content="https://hyphennn.com/2024/06/07/go-defer-closure/index.html">
 <meta property="og:site_name" content="Hyphennn">
-<meta property="og:description" content=".cd-timeline.svelte-1t2uafz .svelte-1t2uafz,.cd-timeline.svelte-1t2uafz .svelte-1t2uafz::after,.cd-timeline.svelte-1t2uafz .svelte-1t2uafz::before{-webkit-box-sizing:border-box;box-sizing:border-">
+<meta property="og:description" content="Go defer+闭包的一个小坑今天在写代码的时候，发现一个奇怪的事情，在将无效的逻辑简化之后，可以总结出这样的一段代码： 1234567func main() &#123;	a :&#x3D; &quot;1&quot;	defer fmt.Println(&quot;defer only: &quot; + a)	defer func() &#123; fmt.Println(&quot;defer c">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="1999-10-01T06:28:20.000Z">
-<meta property="article:modified_time" content="2024-06-24T00:57:38.735Z">
+<meta property="article:published_time" content="2024-06-07T01:24:19.000Z">
+<meta property="article:modified_time" content="2024-06-07T09:42:08.573Z">
 <meta property="article:author" content="hyphennn">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>一些碎碎念 - Hyphennn</title>
+  <title>Go defer+闭包的一个小坑 - Hyphennn</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -237,7 +237,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="一些碎碎念"></span>
+            <span id="subtitle" data-typed-text="Go defer+闭包的一个小坑"></span>
           
         </div>
 
@@ -253,8 +253,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="1999-10-01 14:28" pubdate>
-          October 1, 1999 pm
+        <time datetime="2024-06-07 09:24" pubdate>
+          June 7, 2024 am
         </time>
       </span>
     
@@ -265,7 +265,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k words
+          203 words
         
       </span>
     
@@ -276,7 +276,7 @@
         
         
         
-          11 mins
+          2 mins
         
       </span>
     
@@ -321,102 +321,20 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">一些碎碎念</h1>
+            <h1 id="seo-header">Go defer+闭包的一个小坑</h1>
             
             
               <div class="markdown-body">
                 
-                <style>
-    .cd-timeline.svelte-1t2uafz .svelte-1t2uafz,.cd-timeline.svelte-1t2uafz .svelte-1t2uafz::after,.cd-timeline.svelte-1t2uafz .svelte-1t2uafz::before{-webkit-box-sizing:border-box;box-sizing:border-box}.cd-timeline.svelte-1t2uafz{font-size:1.6rem;font-family:"Droid Serif", serif;color:#7f8c97;background-color:#e9f0f5}.cd-timeline.svelte-1t2uafz a{color:#acb7c0;text-decoration:none}.cd-timeline.svelte-1t2uafz img{max-width:100%}.cd-timeline.svelte-1t2uafz h1,h2{font-family:"Open Sans", sans-serif;font-weight:bold}.cd-timeline.svelte-1t2uafz{overflow:hidden;margin:2em auto}.cd-timeline__container.svelte-1t2uafz{position:relative;width:90%;max-width:1170px;margin:0 auto;padding:2em 0}.cd-timeline__container.svelte-1t2uafz::before{content:'';position:absolute;top:0;left:18px;height:100%;width:4px;background:#d7e4ed}@media only screen and (min-width: 1170px){.cd-timeline.svelte-1t2uafz{margin-top:3em;margin-bottom:3em}.cd-timeline__container.svelte-1t2uafz::before{left:50%;margin-left:-2px}}.cd-timeline__block.svelte-1t2uafz{position:relative;margin:2em 0}.cd-timeline__block.svelte-1t2uafz:after{content:"";display:table;clear:both}.cd-timeline__block.svelte-1t2uafz:first-child{margin-top:0}.cd-timeline__block.svelte-1t2uafz:last-child{margin-bottom:0}@media only screen and (min-width: 1170px){.cd-timeline__block.svelte-1t2uafz{margin:4em 0}}.cd-timeline__img.svelte-1t2uafz{position:absolute;top:0;left:0;width:40px;height:40px;border-radius:50%;-webkit-box-shadow:0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);box-shadow:0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05)}.cd-timeline__img.svelte-1t2uafz{background:#75ce66}@media only screen and (min-width: 1170px){.cd-timeline__img.svelte-1t2uafz{width:60px;height:60px;left:50%;margin-left:-30px;-webkit-transform:translateZ(0);transform:translateZ(0)}}@-webkit-keyframes svelte-1t2uafz-cd-bounce-1{0%{opacity:0;-webkit-transform:scale(0.5);transform:scale(0.5)}60%{opacity:1;-webkit-transform:scale(1.2);transform:scale(1.2)}100%{-webkit-transform:scale(1);transform:scale(1)}}@keyframes svelte-1t2uafz-cd-bounce-1{0%{opacity:0;-webkit-transform:scale(0.5);transform:scale(0.5)}60%{opacity:1;-webkit-transform:scale(1.2);transform:scale(1.2)}100%{-webkit-transform:scale(1);transform:scale(1)}}.cd-timeline__content.svelte-1t2uafz{position:relative;margin-left:60px;background:white;border-radius:0.25em;padding:1em;-webkit-box-shadow:0 3px 0 #d7e4ed;box-shadow:0 3px 0 #d7e4ed}.cd-timeline__content.svelte-1t2uafz:after{content:"";display:table;clear:both}.cd-timeline__content.svelte-1t2uafz::before{content:'';position:absolute;top:16px;right:100%;height:0;width:0;border:7px solid transparent;border-right:7px solid white}.cd-timeline__content.svelte-1t2uafz h2.svelte-1t2uafz{color:#303e49}.cd-timeline__content.svelte-1t2uafz p,.cd-timeline__date.svelte-1t2uafz{font-size:1.3rem}.cd-timeline__content.svelte-1t2uafz p{margin:1em 0;line-height:1.6}.cd-timeline__date.svelte-1t2uafz{display:inline-block}.cd-timeline__date.svelte-1t2uafz{float:left;padding:.8em 0;opacity:.7}@media only screen and (min-width: 768px){.cd-timeline__content.svelte-1t2uafz h2.svelte-1t2uafz{font-size:2rem}.cd-timeline__content.svelte-1t2uafz p{font-size:1.6rem}.cd-timeline__date.svelte-1t2uafz{font-size:1.4rem}}@media only screen and (min-width: 1170px){.cd-timeline__content.svelte-1t2uafz{margin-left:0;padding:1.6em;width:45%;-webkit-transform:translateZ(0);transform:translateZ(0)}.cd-timeline__content.svelte-1t2uafz::before{top:24px;left:100%;border-color:transparent;border-left-color:white}.cd-timeline__date.svelte-1t2uafz{position:absolute;width:100%;left:122%;top:6px;font-size:1.6rem}.cd-timeline__block.svelte-1t2uafz:nth-child(even) .cd-timeline__content.svelte-1t2uafz{float:right}.cd-timeline__block.svelte-1t2uafz:nth-child(even) .cd-timeline__content.svelte-1t2uafz::before{top:24px;left:auto;right:100%;border-color:transparent;border-right-color:white}.cd-timeline__block.svelte-1t2uafz:nth-child(even) .cd-timeline__date.svelte-1t2uafz{left:auto;right:122%;text-align:right}}@-webkit-keyframes svelte-1t2uafz-cd-bounce-2{0%{opacity:0;-webkit-transform:translateX(-100px);transform:translateX(-100px)}60%{opacity:1;-webkit-transform:translateX(20px);transform:translateX(20px)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes svelte-1t2uafz-cd-bounce-2{0%{opacity:0;-webkit-transform:translateX(-100px);transform:translateX(-100px)}60%{opacity:1;-webkit-transform:translateX(20px);transform:translateX(20px)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@-webkit-keyframes svelte-1t2uafz-cd-bounce-2-inverse{0%{opacity:0;-webkit-transform:translateX(100px);transform:translateX(100px)}60%{opacity:1;-webkit-transform:translateX(-20px);transform:translateX(-20px)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes svelte-1t2uafz-cd-bounce-2-inverse{0%{opacity:0;-webkit-transform:translateX(100px);transform:translateX(100px)}60%{opacity:1;-webkit-transform:translateX(-20px);transform:translateX(-20px)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}
-    </style>
-<section class="cd-timeline js-cd-timeline svelte-1t2uafz">
-    <div class="cd-timeline__container svelte-1t2uafz">
-        <div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz"></h2>
-                <font size=4>
-打算升级下整个站点的主题和功能，找了很久，那些贼拉炫酷的站点我这种业余前端是真的搭不起来，还是直接用 butterfly 吧
-</font>
+                <h1 id="Go-defer-闭包的一个小坑"><a href="#Go-defer-闭包的一个小坑" class="headerlink" title="Go defer+闭包的一个小坑"></a>Go defer+闭包的一个小坑</h1><p>今天在写代码的时候，发现一个奇怪的事情，在将无效的逻辑简化之后，可以总结出这样的一段代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	a := <span class="hljs-string">&quot;1&quot;</span><br>	<span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;defer only: &quot;</span> + a)<br>	<span class="hljs-keyword">defer</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123; fmt.Println(<span class="hljs-string">&quot;defer closure: &quot;</span> + a) &#125;()<br><br>	a = <span class="hljs-string">&quot;2&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>先让我们想一想，这段代码的输出是什么？我的之前的理解中，显然，这是问 defer 的执行顺序问题，那太简单了，毫无疑问应该输出：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">defer closure: 1<br>defer only: 1<br></code></pre></td></tr></table></figure>
 
-                <span class="cd-timeline__date svelte-1t2uafz">2024-06-24</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz"></h2>
-                <font size=4>
-好想 618 给自己买点东西啊，不然好久没消费了，感觉钱都白赚了。。。但是一看自己卡里 5000 块钱都没了。。。生活太艰难了
-</font>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2024-05-31</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz"></h2>
-                <font size=4>
-仍然记得那是中学时一个平凡的初秋黄昏，我在田径场的草坪上漫不经心地坐着看小说，停在山尖的落日洒出柔和的光芒，别说心事，心头竟连一件闲事都没有。<br>
-我总以为那是一个平凡的日子。然而往后多年一路奔跑再无半刻停歇，那样的日子再也不会有了。<br>
-我们无法估量「片刻」的价值，除非它成为回忆。
-</font>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2024-05-21</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz"></h2>
-                <font size=4>
-oncall 值班真的会让人犯厌蠢症，作为工程师没有任何解决问题的能力，文档不会看，google/内网不会查，最基本的错误提示看不明白，出现任何问题只会
-找人问然后要求别人解决，要不就是无脑甩锅跟个低能一样，某些人 35 被裁都裁晚了。
-</font>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2024-05-08</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz"></h2>
-                <font size=4>
-不想参加饭局。以前觉得有朋友一起约饭是很快乐的事情，但随着年岁的增长，「朋友」愈发通货膨胀，似乎什么样的人都能称之为「朋友」，
-几乎每周都有饭局，真的不想去，只想周末好好休息休息，然而又不好意思拒绝。真的很烦。 
-</font>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2024-04-30</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz"></h2>
-                <font size=4>
-u1s1，这个页面真的好丑。。。但是作为一名业余得不能再业余的前端，有个这样的页面就不错了，找不好更好的 hexo 能用的解决方案
-</font>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2024-04-10</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz"></h2>
-                <font size=4>
-想开个新的页面，记录一些乱七八糟的碎碎念，用时间线串联一下
-</font>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2024-04-01</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-
+<p>然而，真的执行这段代码之后，我惊讶的发现，真实的输出是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">defer closure: 2<br>defer only: 1<br></code></pre></td></tr></table></figure>
+<p>这就有些让我费解了，正好借着这个机会，我对 defer&amp; 闭包做了一次系统的整理。</p>
+<h2 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h2><h3 id="预计算"><a href="#预计算" class="headerlink" title="预计算"></a>预计算</h3><p>Go 官方文档对此由如下<a href="">阐述</a></p>
 
                 
               </div>
@@ -434,8 +352,8 @@ u1s1，这个页面真的好丑。。。但是作为一名业余得不能再业�
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>一些碎碎念</div>
-      <div>https://hyphennn.com/1999/10/01/fragment/</div>
+      <div>Go defer+闭包的一个小坑</div>
+      <div>https://hyphennn.com/2024/06/07/go-defer-closure/</div>
     </div>
     <div class="license-meta">
       
@@ -447,7 +365,7 @@ u1s1，这个页面真的好丑。。。但是作为一名业余得不能再业�
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>October 1, 1999</div>
+          <div>June 7, 2024</div>
         </div>
       
       
@@ -474,6 +392,23 @@ u1s1，这个页面真的好丑。。。但是作为一名业余得不能再业�
 
 
 
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/22/go-vendor/" title="Go Vendor-时代的眼泪">
+                        <span class="hidden-mobile">Go Vendor-时代的眼泪</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
               
             </div>
 
