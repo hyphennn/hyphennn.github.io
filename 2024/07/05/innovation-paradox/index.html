@@ -16,21 +16,21 @@
   <meta name="author" content="hyphennn">
   <meta name="keywords" content="">
   
-    <meta name="description" content="没时间写啊啊啊啊啊啊啊啊">
+    <meta name="description" content="底层困境-精品不如新品，积累不如改变">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Go defer+闭包的一个小坑">
-<meta property="og:url" content="https://hyphennn.com/2024/06/07/go-defer-closure/index.html">
+<meta property="og:title" content="Infra 的创新悖论">
+<meta property="og:url" content="https://hyphennn.com/2024/07/05/innovation-paradox/index.html">
 <meta property="og:site_name" content="Hyphennn">
-<meta property="og:description" content="没时间写啊啊啊啊啊啊啊啊">
+<meta property="og:description" content="底层困境-精品不如新品，积累不如改变">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-06-07T01:24:19.000Z">
-<meta property="article:modified_time" content="2024-06-28T00:57:51.189Z">
+<meta property="article:published_time" content="2024-07-05T01:07:12.000Z">
+<meta property="article:modified_time" content="2024-07-05T01:15:18.116Z">
 <meta property="article:author" content="hyphennn">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Go defer+闭包的一个小坑 - Hyphennn</title>
+  <title>Infra 的创新悖论 - Hyphennn</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -248,7 +248,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Go defer+闭包的一个小坑"></span>
+            <span id="subtitle" data-typed-text="Infra 的创新悖论"></span>
           
         </div>
 
@@ -264,8 +264,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-06-07 09:24" pubdate>
-          June 7, 2024 am
+        <time datetime="2024-07-05 09:07" pubdate>
+          July 5, 2024 am
         </time>
       </span>
     
@@ -276,7 +276,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          203 words
+          1.1k words
         
       </span>
     
@@ -287,7 +287,7 @@
         
         
         
-          2 mins
+          9 mins
         
       </span>
     
@@ -332,21 +332,19 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Go defer+闭包的一个小坑</h1>
+            <h1 id="seo-header">Infra 的创新悖论</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Go-defer-闭包的一个小坑"><a href="#Go-defer-闭包的一个小坑" class="headerlink" title="Go defer+闭包的一个小坑"></a>Go defer+闭包的一个小坑</h1><p>今天在写代码的时候，发现一个奇怪的事情，在将无效的逻辑简化之后，可以总结出这样的一段代码：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	a := <span class="hljs-string">&quot;1&quot;</span><br>	<span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;defer only: &quot;</span> + a)<br>	<span class="hljs-keyword">defer</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123; fmt.Println(<span class="hljs-string">&quot;defer closure: &quot;</span> + a) &#125;()<br><br>	a = <span class="hljs-string">&quot;2&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<p>先让我们想一想，这段代码的输出是什么？我的之前的理解中，显然，这是问 defer 的执行顺序问题，那太简单了，毫无疑问应该输出：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">defer closure: 1<br>defer only: 1<br></code></pre></td></tr></table></figure>
-
-<p>然而，真的执行这段代码之后，我惊讶的发现，真实的输出是：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">defer closure: 2<br>defer only: 1<br></code></pre></td></tr></table></figure>
-<p>这就有些让我费解了，正好借着这个机会，我对 defer&amp; 闭包做了一次系统的整理。</p>
-<h2 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h2><h3 id="预计算"><a href="#预计算" class="headerlink" title="预计算"></a>预计算</h3><p>Go 官方文档对此由如下<a href="">阐述</a></p>
-<p>to be finished</p>
+                <h1 id="Infra-的创新悖论"><a href="#Infra-的创新悖论" class="headerlink" title="Infra 的创新悖论"></a>Infra 的创新悖论</h1><blockquote>
+<p>我在内网看到的一篇帖子，写得真好，我觉得很好的描述的我在基础架构部门工作遇到的所谓「创新悖论」，搬了过来。<br>所有敏感信息都已删除，如果原作者介意，请联系我删除🙏</p>
+</blockquote>
+<p>原标题：底层困境-精品不如新品，积累不如改变</p>
+<p>好项目一旦被认可，就已经在迈向了死亡</p>
+<p>每年一次的晋升制度需要RD小A在今年拥有亮眼的技术产出，当小A因为出色的项目A获得激励和晋升机会后，项目A从此便成为了小A手中一个食之无味弃之可惜的鸡肋。无论是从晋升、绩效还是经验的角度，他都很难再在来年用项目A获得多少利益。第二年他还要全力扑在项目A上吗？从0.8到0.9总比从0到0.8困难得多，也没意思得多。不如专注做个新东西，既能体现他的创造力、价值和产出，又能拓展他的经验和能力边界。此时把项目交出去便是小A最好的选择，即便不交出去，最好也只是稍作维护。<br>而通常情况下，小A都是能把项目交出去的，因为他的优秀和他的“创新意识”，同样能够给他的leader带来好处和惊喜；或许在有些情况下，放低项目A的优先级给小A腾出手来搞别的事情也正是来自leader的授意。此时，被安排去接手维护项目A的小B便成为了无奈又惨淡的那一个。对于他来说，这个项目连鸡肋都不如，是纯纯的鸡骨头。小B会把项目A做的越来越好吗？答案很明显，能被好好维护已经算是项目A的幸运了</p>
+<p>项目A本来经过小A与用户磨合迭代后已经蛮好用了，好多一线开发人员都用的顺手；可后来给它提新功能它不乐意支持了，老功能也越来越不稳定，效率降低困扰增加，开发人员都在吐槽，此时小A的leader介意吗？有但不多：没关系，又不是不能用，确实也是没空管了，要不你们把项目接过去一起维护？没事儿，我们自己又不用，阻碍你们开发了？要是太紧急就把代码权限给你们开了一起排查排查？别急哈，新工具&#x2F;新框架已经在做了比这个更好用，要不你们现在就可以先试试，做我们第一批用户吧，享受vip服务哦～更糟糕的情况是开发人员也被传达自上而下的指令：老的别用了用新的工具&#x2F;框架吧，新的更好以后功能也更全。开发人员随手一试，这也不行那也不行啊怎么办啊领导？领导说没关系，这只是阵痛，你边用他们边给你改，很快就能行了！</p>
+<p>这种状况是管理者们希望看到的吗，虽然从常理上来说，任何一个工程师应该都不希望事态如此发展。工欲善其事 必先利其器，大家希望用精且专的东西，而不是频繁切换磨合新工具。但从现实层面来说，很遗憾，这从上至下逐层的管理者之中，除去最顶部的两三层，应该有不少层都乐于如此。小A们给leader们带来了很多可以向上汇报的东西，这让leader们在他们的上级眼中看来，好像能够带领团队一直探索和前进，创新和突破。他们总是充满干劲，产出满满。他们有错吗？没有错，为什么不呢？适者生存，在这样的环境和制度之下，他们就是优胜者和利益倾斜方。造成这种评判结果的原因是这评断好坏的评委不是每一个工程师，这决定使用哪一个工具的决策者不是每一个一线开发人员，而是他们一层又一层的上级。  </p>
 
                 
               </div>
@@ -385,8 +383,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Go defer+闭包的一个小坑</div>
-      <div>https://hyphennn.com/2024/06/07/go-defer-closure/</div>
+      <div>Infra 的创新悖论</div>
+      <div>https://hyphennn.com/2024/07/05/innovation-paradox/</div>
     </div>
     <div class="license-meta">
       
@@ -398,7 +396,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>June 7, 2024</div>
+          <div>July 5, 2024</div>
         </div>
       
       
@@ -430,18 +428,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/07/05/innovation-paradox/" title="Infra 的创新悖论">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Infra 的创新悖论</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/05/22/go-vendor/" title="Go Vendor-时代的眼泪">
-                        <span class="hidden-mobile">Go Vendor-时代的眼泪</span>
+                      <a href="/2024/06/07/go-defer-closure/" title="Go defer+闭包的一个小坑">
+                        <span class="hidden-mobile">Go defer+闭包的一个小坑</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
