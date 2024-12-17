@@ -1,109 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="Hexo Theme Redefine">
-    
-    <meta name="author" content="hyphennn">
-    <!-- preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    
-    <!--- Seo Part-->
-    
-    <link rel="canonical" href="https://hyphennn.com/2024/05/22/go-vendor/"/>
-    <meta name="robots" content="index,follow">
-    <meta name="googlebot" content="index,follow">
-    <meta name="revisit-after" content="1 days">
-    
-    
-    
-        
-        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/avatar0.png">
+  <link rel="icon" href="/img/avatar0.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="hyphennn">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="珍爱生命，远离 vendor，module 解君愁">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go Vendor-时代的眼泪">
 <meta property="og:url" content="https://hyphennn.com/2024/05/22/go-vendor/index.html">
 <meta property="og:site_name" content="Hyphennn">
-<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:description" content="珍爱生命，远离 vendor，module 解君愁">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://hyphennn.com/images/redefine-og.webp">
 <meta property="article:published_time" content="2024-05-22T02:46:36.000Z">
 <meta property="article:modified_time" content="2024-05-28T02:20:44.240Z">
 <meta property="article:author" content="hyphennn">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://hyphennn.com/images/redefine-og.webp">
-    
-    
-    <!--- Icon Part-->
-    <link rel="icon" type="image/png" href="/img/avatar0.png" sizes="192x192">
-    <link rel="apple-touch-icon" sizes="180x180" href="/img/avatar0.png">
-    <meta name="theme-color" content="#A31F34">
-    <link rel="shortcut icon" href="/img/avatar0.png">
-    <!--- Page Info-->
-    
-    <title>
-        
-            Go Vendor-时代的眼泪 | Hyphennn
-        
-    </title>
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Go Vendor-时代的眼泪 - Hyphennn</title>
 
-    
-<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-    <!--- Inject Part-->
-    
 
-    
-<link rel="stylesheet" href="/css/style.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
-    
-        
-<link rel="stylesheet" href="/css/build/tailwind.css">
 
-    
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-    
-<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
 
-    
-<link rel="stylesheet" href="/fonts/Geist/geist.css">
 
-    <!--- Font Part-->
-    
-    
-    
-    
-    
-    
 
-    <script id="hexo-configurations">
-    window.config = {"hostname":"hyphennn.com","root":"/","language":"en","path":"search.xml"};
-    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://kofjckce.lc-cn-n1-shared.com","enable":false,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/img/background.png","dark":"/img/background.png"},"title":"就像你无从典当一段旧时光","subtitle":{"text":[],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#eee","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/hyphennn","instagram":null,"zhihu":"https://www.zhihu.com/people/zhi-shang-bu-gou-shu-tai-yang","twitter":null,"email":"hyphennn@163.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.2","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":99},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"归档":{"path":"/archives/","icon":"fa-regular fa-archive"},"碎碎念":{"path":"/essay/","icon":"fa-regular fa-clock"},"关于我":{"path":"/about/","icon":"fa-regular fa-user"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":false,"limit":3}},"footerStart":"2024/1/25 00:00:00"};
-    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
-    window.data = {"masonry":false};
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"hyphennn.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"kOfjcKCe0eBHkEp1biYqXdFL-gzGzoHsz","app_key":"V0CncmlJItyXE9Acrxrrij83","server_url":"https://kofjckce.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
-    
-    <!--- Fontawesome Part-->
-    
-<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
 
-    
-<link rel="stylesheet" href="/fontawesome/brands.min.css">
+  
 
-    
-<link rel="stylesheet" href="/fontawesome/solid.min.css">
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
 
-    
-<link rel="stylesheet" href="/fontawesome/regular.min.css">
+  
 
+  
+
+  
+
+  
     
-    
-    
-    
+  
+
+
+
+  
 <!-- hexo injector head_end start --><script>
                                                (function(d, w, c) {
                                                    w.ChatraID = 'a32sqSvf5uzvTMyBw';
@@ -118,320 +124,232 @@
                                             </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.1.1"></head>
 
 
-
 <body>
-	<div class="progress-bar-container">
-	
+  
 
-	
-	<span class="pjax-progress-bar"></span>
-	<!--        <span class="swup-progress-icon">-->
-	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
-	<!--        </span>-->
-	
-</div>
+  <header>
+    
 
-<main class="page-container" id="swup">
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Hyphennn</strong>
+    </a>
 
-	
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-	<div class="main-content-container flex flex-col justify-between min-h-dvh">
-		<div class="main-content-header">
-			<header class="navbar-container px-6 md:px-12">
-    <div class="navbar-content transition-navbar ">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                
-                Hyphennn
-                
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/daily" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Daily</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/tech" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Tech</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/self" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Self</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/1999/10/01/fragment/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>Fragment</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/essay" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>Fragment2</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
             </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/background.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Go Vendor-时代的眼泪"></span>
+          
         </div>
 
-        <div class="right">
-            <!-- PC -->
-            <div class="desktop">
-                <ul class="navbar-list">
-                    
-                        
-                            
-
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class=""
-                                   href="/"
-                                        >
-                                    <i class="fa-regular fa-house fa-fw"></i>
-                                    HOME
-                                    
-                                </a>
-
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            
-
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class=""
-                                   href="/archives/"
-                                        >
-                                    <i class="fa-regular fa-archive fa-fw"></i>
-                                    归档
-                                    
-                                </a>
-
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            
-
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class=""
-                                   href="/essay/"
-                                        >
-                                    <i class="fa-regular fa-clock fa-fw"></i>
-                                    碎碎念
-                                    
-                                </a>
-
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            
-
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class=""
-                                   href="/about/"
-                                        >
-                                    <i class="fa-regular fa-user fa-fw"></i>
-                                    关于我
-                                    
-                                </a>
-
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                    
-                        <li class="navbar-item search search-popup-trigger">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </li>
-                    
-                </ul>
-            </div>
-            <!-- Mobile -->
-            <div class="mobile">
-                
-                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                
-                <div class="icon-item navbar-bar">
-                    <div class="navbar-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile sheet -->
-    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
-        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
-            
-                
-                    
-
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
-                           href="/"
-                        >
-                            <span>
-                                HOME
-                            </span>
-                            
-                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
-                            
-                        </a>
-                        
-
-                        
-                    </li>
-            
-                
-                    
-
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
-                           href="/archives/"
-                        >
-                            <span>
-                                归档
-                            </span>
-                            
-                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
-                            
-                        </a>
-                        
-
-                        
-                    </li>
-            
-                
-                    
-
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
-                           href="/essay/"
-                        >
-                            <span>
-                                碎碎念
-                            </span>
-                            
-                                <i class="fa-regular fa-clock fa-sm fa-fw"></i>
-                            
-                        </a>
-                        
-
-                        
-                    </li>
-            
-                
-                    
-
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
-                           href="/about/"
-                        >
-                            <span>
-                                关于我
-                            </span>
-                            
-                                <i class="fa-regular fa-user fa-sm fa-fw"></i>
-                            
-                        </a>
-                        
-
-                        
-                    </li>
-            
-
-            
-            
-        </ul>
-
-        <div class="statistics flex justify-around my-2.5">
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
-        <div class="label text-third-text-color text-sm">Tags</div>
-    </a>
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
-        <div class="label text-third-text-color text-sm">Categories</div>
-    </a>
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">13</div>
-        <div class="label text-third-text-color text-sm">Posts</div>
-    </a>
-</div>
-    </div>
-
-    <div class="window-mask"></div>
-
-</header>
-
-
-		</div>
-
-		<div class="main-content-body transition-fade-up">
-			
-
-			<div class="main-content">
-				<div class="post-page-container flex relative justify-between box-border w-full h-full">
-	<div class="article-content-container">
-
-		<div class="article-title relative w-full">
-			
-			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Go Vendor-时代的眼泪</h1>
-			</div>
-			
-		</div>
-
-		
-		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
-			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
-				<img src="/img/cat_logo.png">
-			</div>
-			<div class="info flex flex-col justify-between">
-				<div class="author flex items-center">
-					<span class="name text-default-text-color text-lg font-semibold">hyphennn</span>
-					
-					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
-					
-				</div>
-				<div class="meta-info">
-					<div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-05-22 10:46:36</span>
-        <span class="mobile">2024-05-22 10:46:36</span>
-        <span class="hover-info">Created</span>
-    </span>
+        
+          
+  <div class="mt-3">
     
-        <span class="article-date article-meta-item">
-            <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-05-28 10:20:44</span>
-            <span class="mobile">2024-05-28 10:20:44</span>
-            <span class="hover-info">Updated</span>
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        hyphennn
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-22 10:46" pubdate>
+          May 22, 2024 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> views
         </span>
+        
+      
     
+  </div>
 
-    
-        <span class="article-categories article-meta-item">
-            <i class="fa-regular fa-folders"></i>&nbsp;
-            <ul>
-                
-                
-                    
-                        
-                        <li>
-                            <a href="/categories/tech/">tech</a>&nbsp;
-                        </li>
-                    
-                    
-                
-            </ul>
-        </span>
-    
-    
 
-    
-    
-    
-    
+        
+      </div>
+
+      
+    </div>
+  </div>
 </div>
 
-				</div>
-			</div>
-		</div>
-		
+</div>
 
-		
+  </header>
 
+  <main>
+    
+      
 
-		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h1 id="Go-Vendor"><a href="#Go-Vendor" class="headerlink" title="Go Vendor"></a>Go Vendor</h1><p>go vendor 也算时代的眼泪了，在 go1.5～1.11 之间被相对广泛的使用，在 1.11之后基本就退出历史舞台了，原因无他，go module 太好用了。 即便政治正确一点地说，它和 cargo、bazel 相比功能上没有那么丰富，但其轻量、简便在包管理工具中也难寻其右。</p>
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Go Vendor-时代的眼泪</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Go-Vendor"><a href="#Go-Vendor" class="headerlink" title="Go Vendor"></a>Go Vendor</h1><p>go vendor 也算时代的眼泪了，在 go1.5～1.11 之间被相对广泛的使用，在 1.11之后基本就退出历史舞台了，原因无他，go module 太好用了。 即便政治正确一点地说，它和 cargo、bazel 相比功能上没有那么丰富，但其轻量、简便在包管理工具中也难寻其右。</p>
 <p>事实上，在我 21 年开始接触 Go 时，主流 Go 版本已经来到 1.16，因此我从未接触过 vendor 项目， 甚至连 GOPATH 也不用太了解。 不过，既然是时代的眼泪，vendor 就一定还留着其泪痕。</p>
 <p>跳槽之后，新工作的核心仓库，是一个 14 年就开始的古老项目，现在还留着不少针对 go1.5 的条件编译代码和汇编。此仓库主打一个历史悠久， 历经古法包管理（直接复制仓库）、bazel、vendor 等多个模式，并且由于这些模式的混杂导致至今未能升级到 go module，此外， go 版本也停留在 go1.12，主要也没啥人敢升，一来没产出，二来容易出问题。虽说程序员和代码有一个能跑就行，但现在的大环境，程序员怕是不太好跑。</p>
 <p>因此，为了开发这个仓库，我对 go vendor 进行了相对深入的了解，记录一下。</p>
@@ -445,17 +363,17 @@
 <h2 id="Vendor"><a href="#Vendor" class="headerlink" title="Vendor"></a>Vendor</h2><p>Vendor 模式是在 Go 早期没有包管理的野蛮发展下形成的一个社区实践，并在 1.5 被正式纳入语言特性，1.13 结束生命周期。 Vendor 其实很简单，和 node_modules 差不太多，本质上都是「约定一个目录存放第三方包」，这个目录便是 vendor。</p>
 <p>让我们以一个例子开始。假如你创建了一个项目，这个项目目前为止只使用了标准库，我们知道标准库在 GOROOT 下保存，那么，你们的代码只需要在 GOPATH&#x2F;src 下挂着就行了，当然，原则上来说你挂哪都行，甚至根目录也无所谓，大不了临时改一下 $GOPATH。</p>
 <p>不过，我们都是习惯良好的工程师，为了方便管理手上的诸多项目，我们决定固定 GOPATH，并且按照项目名称进行良好的目录层级划分，就像 JAVA 那样（先让我们这么做，后面我们会明白这么做的好处的，良好的习惯总是会有回报的），我们假定这个项目叫 github.com&#x2F;hyphennn&#x2F;proj1，于是，你的目录如下：</p>
-<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$GOPATH</span><br><span class="line">    - bin</span><br><span class="line">    - src</span><br><span class="line">        - github.com</span><br><span class="line">            - hyphennn</span><br><span class="line">                - proj1 // 下面的层级是你的源代码</span><br></pre></td></tr></table></figure></div>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text">$GOPATH<br>    - bin<br>    - src<br>        - github.com<br>            - hyphennn<br>                - proj1 // 下面的层级是你的源代码<br></code></pre></td></tr></table></figure>
 <p>接下来，让我们迭代这个项目，以及项目中的包管理机制</p>
 <h3 id="版本一-GOPATH-机制"><a href="#版本一-GOPATH-机制" class="headerlink" title="版本一 GOPATH 机制"></a>版本一 GOPATH 机制</h3><p>现在，我们决定引入某一个功能，这个功能我们曾经写过，只不过在 github.com&#x2F;hyphennn&#x2F;proj2 这个项目中，假定代码在 github.com&#x2F;hyphennn&#x2F;proj2&#x2F;waibiwaibi&#x2F;waibibabo.go 这个文件里面，自然地，复制过去是个好想法，但假如这个文件依赖了项目中的其他文件呢？都复制过去吗？要是变量名、方法名有冲突咋办？更进一步的，以后 proj2 继续迭代，难道改一次代码就复制一次吗？这显然不合理。事实上，Go 提供了解决方案，你可以如下组织你的代码：</p>
-<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$GOPATH</span><br><span class="line">    - bin</span><br><span class="line">    - src</span><br><span class="line">        - github.com</span><br><span class="line">            - hyphennn</span><br><span class="line">                - proj1 // 下面的层级是你的源代码</span><br><span class="line">                - proj2</span><br></pre></td></tr></table></figure></div>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text">$GOPATH<br>    - bin<br>    - src<br>        - github.com<br>            - hyphennn<br>                - proj1 // 下面的层级是你的源代码<br>                - proj2<br></code></pre></td></tr></table></figure>
 <p>这样，你只需要 import 一下就好了：</p>
-<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/hyphennn/proj2/waibiwaibi&quot;</span></span><br></pre></td></tr></table></figure></div>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;github.com/hyphennn/proj2/waibiwaibi&quot;</span><br></code></pre></td></tr></table></figure>
 <p>这种方式是很直观的，因为你引用项目内其他文件夹时你也是这么做的，当项目中被声明 import “xxx” 时，编译器会去寻找 GOPATH&#x2F;src&#x2F;xxx，如果找到，就会将其作为依赖库加入编译。当然，会优先在 $GOROOT 下找标准库。</p>
 <p>项目跑的很不错，现在该添加新的功能了。功能太复杂，人力成本非常有限，不过好消息是我们找到了两个来自互联网的包，帮助我们解决了问题，他们分别是：github.com&#x2F;helper1&#x2F;pkg1 和 golang.org&#x2F;helper2&#x2F;pkg2。怎么把这两个包引入呢？一个很直观的思路就是：像使用我们自己的项目一样使用这两个包，参照一下上面 import 寻找目标的原理，我们能很轻易的给出如下目录：</p>
-<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$GOPATH</span><br><span class="line">    - bin</span><br><span class="line">    - src</span><br><span class="line">        - github.com</span><br><span class="line">            - hyphennn</span><br><span class="line">                - proj1 // 下面的层级是你的源代码</span><br><span class="line">                - proj2</span><br><span class="line">            - helper1</span><br><span class="line">                - pkg1</span><br><span class="line">        - golang.org</span><br><span class="line">            - helper2</span><br><span class="line">                -pkg2</span><br></pre></td></tr></table></figure></div>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs text">$GOPATH<br>    - bin<br>    - src<br>        - github.com<br>            - hyphennn<br>                - proj1 // 下面的层级是你的源代码<br>                - proj2<br>            - helper1<br>                - pkg1<br>        - golang.org<br>            - helper2<br>                -pkg2<br></code></pre></td></tr></table></figure>
 <p>同样的，import 语句如下：</p>
-<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">    <span class="string">&quot;github.com/hyphennn/proj2/waibiwaibi&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/helper1/pkg1&quot;</span> <span class="comment">// 让我们省略掉后面的子目录，毕竟都差不多</span></span><br><span class="line">    <span class="string">&quot;golang.org/helper2/pkg2&quot;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">import</span>(<br>    <span class="hljs-string">&quot;github.com/hyphennn/proj2/waibiwaibi&quot;</span><br>    <span class="hljs-string">&quot;github.com/helper1/pkg1&quot;</span> <span class="hljs-comment">// 让我们省略掉后面的子目录，毕竟都差不多</span><br>    <span class="hljs-string">&quot;golang.org/helper2/pkg2&quot;</span><br>)<br></code></pre></td></tr></table></figure>
 <p>尝试一下，运行良好，以后就这么干，可以不断引入新的包。</p>
 <p>到此为止，我们完成了第一版的包管理机制，严格来说并不叫包管理，因为它完全依赖 GOPATH，不过这不重要，我们的项目很棒，赚大钱了(bushi</p>
 <h3 id="版本二-Vendor-机制"><a href="#版本二-Vendor-机制" class="headerlink" title="版本二 Vendor 机制"></a>版本二 Vendor 机制</h3><p>如果你了解过包管理工具，以及构建工程，显然，GOPATH 不是个好的方案，它至少有如下缺点：</p>
@@ -493,383 +411,491 @@
 </li>
 </ul>
 <p>基于上述规则，我们调整项目如下：</p>
-<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">$GOPATH</span><br><span class="line">    - bin</span><br><span class="line">    - vendor</span><br><span class="line">        github.com</span><br><span class="line">            - helper8</span><br><span class="line">                - pkg10</span><br><span class="line">                - pkg11</span><br><span class="line">    - src</span><br><span class="line">        - github.com</span><br><span class="line">            - hyphennn</span><br><span class="line">                - proj1 // 下面的层级是你的源代码</span><br><span class="line">                    - 其他代码</span><br><span class="line">                    - vendor</span><br><span class="line">                        - github.com</span><br><span class="line">                            - helper1</span><br><span class="line">                                - pkg1</span><br><span class="line">                                - pkg2</span><br><span class="line">                            - helper2</span><br><span class="line">                                - pkg3</span><br><span class="line">                                - pkg4</span><br><span class="line">                        - golang.org</span><br><span class="line">                            - helper3</span><br><span class="line">                                - pkg4</span><br><span class="line">                            - helper4</span><br><span class="line">                                - pkg5</span><br><span class="line">                                - pkg6</span><br><span class="line">                - proj2</span><br><span class="line">                    - vendor</span><br><span class="line">                        - github.com</span><br><span class="line">                            - helper2</span><br><span class="line">                                - pkg3</span><br><span class="line">                                - pkg4</span><br><span class="line">                        - golang.org</span><br><span class="line">                            - helper3</span><br><span class="line">                                - pkg4</span><br><span class="line">            - vendor</span><br><span class="line">                - github.com</span><br><span class="line">                    - helper5</span><br><span class="line">                        - pkg6</span><br><span class="line">                        - pkg7</span><br><span class="line">        - golang.org</span><br><span class="line">            - helper2</span><br><span class="line">                -pkg2</span><br></pre></td></tr></table></figure></div>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs text">$GOPATH<br>    - bin<br>    - vendor<br>        github.com<br>            - helper8<br>                - pkg10<br>                - pkg11<br>    - src<br>        - github.com<br>            - hyphennn<br>                - proj1 // 下面的层级是你的源代码<br>                    - 其他代码<br>                    - vendor<br>                        - github.com<br>                            - helper1<br>                                - pkg1<br>                                - pkg2<br>                            - helper2<br>                                - pkg3<br>                                - pkg4<br>                        - golang.org<br>                            - helper3<br>                                - pkg4<br>                            - helper4<br>                                - pkg5<br>                                - pkg6<br>                - proj2<br>                    - vendor<br>                        - github.com<br>                            - helper2<br>                                - pkg3<br>                                - pkg4<br>                        - golang.org<br>                            - helper3<br>                                - pkg4<br>            - vendor<br>                - github.com<br>                    - helper5<br>                        - pkg6<br>                        - pkg7<br>        - golang.org<br>            - helper2<br>                -pkg2<br></code></pre></td></tr></table></figure>
 
 <p>其中的逻辑看起来可能有些绕，这里地方太小，写不下（绝对不是懒</p>
 <p>按照上面说的规则，去理解一下，整体还是非常清晰的。</p>
 <h3 id="版本三-Module-机制"><a href="#版本三-Module-机制" class="headerlink" title="版本三 Module 机制"></a>版本三 Module 机制</h3><p>Vendor 当然有各种缺点，于是 Module 机制出现了，并且良好地运行至今。介绍 Module 的文章太多了，这里就不班门弄斧了～</p>
-<h2 id="govendor"><a href="#govendor" class="headerlink" title="govendor"></a>govendor</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/kardianos/govendor" >govendor<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> 是一个应用比较广泛的项目，主要目标是解决「vendor 目录过于占用空间」和「vendor 目录难以管理依赖包版本」的问题，一定程度上成为了 Go 包管理的事实标准。如今此项目已经不再维护了，也不接收任何新的 PR，但仍然不妨碍我们了解一下。</p>
+<h2 id="govendor"><a href="#govendor" class="headerlink" title="govendor"></a>govendor</h2><p><a target="_blank" rel="noopener" href="https://github.com/kardianos/govendor">govendor</a> 是一个应用比较广泛的项目，主要目标是解决「vendor 目录过于占用空间」和「vendor 目录难以管理依赖包版本」的问题，一定程度上成为了 Go 包管理的事实标准。如今此项目已经不再维护了，也不接收任何新的 PR，但仍然不妨碍我们了解一下。</p>
 <p>govendor 的思路有些像 npm，核心是：不再直接管理依赖包文件，而是使用 vendor.json 的文件来记录依赖包的元信息，是的，这个思路和 package.json 甚至 go.mod 都是非常相似的。使用 govendor 后，原来存放诸多依赖包的 vendor 目录下只需要放置一个 vendor.json 文件，由 govendor 提供的命令行工具维护此文件以及基于此文件下载依赖包。下面给出一个元信息的实例：</p>
-<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;checksumSHA1&quot;: &quot;GcaTbmmzSGqTb2X6qnNtmDyew1Q=&quot;,</span><br><span class="line">  &quot;path&quot;: &quot;github.com/pkg/errors&quot;,</span><br><span class="line">  &quot;revision&quot;: &quot;a2d6902c6d2a2f194eb3fb474981ab7867c81505&quot;,</span><br><span class="line">  &quot;revisionTime&quot;: &quot;2016-06-27T22:23:52Z&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text">&#123;<br>  &quot;checksumSHA1&quot;: &quot;GcaTbmmzSGqTb2X6qnNtmDyew1Q=&quot;,<br>  &quot;path&quot;: &quot;github.com/pkg/errors&quot;,<br>  &quot;revision&quot;: &quot;a2d6902c6d2a2f194eb3fb474981ab7867c81505&quot;,<br>  &quot;revisionTime&quot;: &quot;2016-06-27T22:23:52Z&quot;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>从此实例中就可以大体明白 govendor 的工作原理了，并不算非常复杂，我想大约也是因此 govendor 才广受欢迎。</p>
 <p>使用 govendor 后，我们项目的目录便可以简化如下：</p>
-<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$GOPATH</span><br><span class="line">    - bin</span><br><span class="line">    - vendor</span><br><span class="line">        github.com</span><br><span class="line">            - vendor.json</span><br><span class="line">    - src</span><br><span class="line">        - github.com</span><br><span class="line">            - hyphennn</span><br><span class="line">                - proj1 // 下面的层级是你的源代码</span><br><span class="line">                    - 其他代码</span><br><span class="line">                    - vendor</span><br><span class="line">                        - vendor.json</span><br><span class="line">                - proj2</span><br><span class="line">                    - vendor</span><br><span class="line">                        - vendor.json</span><br><span class="line">            - vendor</span><br><span class="line">                - vendor.json</span><br><span class="line">        - golang.org</span><br><span class="line">            - helper2</span><br><span class="line">                -pkg2</span><br></pre></td></tr></table></figure></div>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs text">$GOPATH<br>    - bin<br>    - vendor<br>        github.com<br>            - vendor.json<br>    - src<br>        - github.com<br>            - hyphennn<br>                - proj1 // 下面的层级是你的源代码<br>                    - 其他代码<br>                    - vendor<br>                        - vendor.json<br>                - proj2<br>                    - vendor<br>                        - vendor.json<br>            - vendor<br>                - vendor.json<br>        - golang.org<br>            - helper2<br>                -pkg2<br></code></pre></td></tr></table></figure>
 
 <p>govendor 提供如下的命令参数，含义参照一下解释就能大致理清楚：</p>
-<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;sub-command&gt;</span><br><span class="line">	init     Create the &quot;vendor&quot; folder and the &quot;vendor.json&quot; file.</span><br><span class="line">	list     List and filter existing dependencies and packages.</span><br><span class="line">	add      Add packages from $GOPATH.</span><br><span class="line">	update   Update packages from $GOPATH.</span><br><span class="line">	remove   Remove packages from the vendor folder.</span><br><span class="line">	status   Lists any packages missing, out-of-date, or modified locally.</span><br><span class="line">	fetch    Add new or update vendor folder packages from remote repository.</span><br><span class="line">	sync     Pull packages into vendor folder from remote repository with revisions</span><br><span class="line">  	             from vendor.json file.</span><br><span class="line">	migrate  Move packages from a legacy tool to the vendor folder with metadata.</span><br><span class="line">	get      Like &quot;go get&quot; but copies dependencies into a &quot;vendor&quot; folder.</span><br><span class="line">	license  List discovered licenses for the given status or import paths.</span><br><span class="line">	shell    Run a &quot;shell&quot; to make multiple sub-commands more efficient for large</span><br><span class="line">	             projects.</span><br><span class="line"></span><br><span class="line">	go tool commands that are wrapped:</span><br><span class="line">	  `+&lt;status&gt;` package selection may be used with them</span><br><span class="line">	fmt, build, install, clean, test, vet, generate, tool</span><br><span class="line">	</span><br><span class="line">&lt;status&gt;</span><br><span class="line">	+local    (l) packages in your project</span><br><span class="line">	+external (e) referenced packages in GOPATH but not in current project</span><br><span class="line">	+vendor   (v) packages in the vendor folder</span><br><span class="line">	+std      (s) packages in the standard library</span><br><span class="line"></span><br><span class="line">	+excluded (x) external packages explicitly excluded from vendoring</span><br><span class="line">	+unused   (u) packages in the vendor folder, but unused</span><br><span class="line">	+missing  (m) referenced packages but not found</span><br><span class="line"></span><br><span class="line">	+program  (p) package is a main package</span><br><span class="line"></span><br><span class="line">	+outside  +external +missing</span><br><span class="line">	+all      +all packages</span><br></pre></td></tr></table></figure></div>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs text">&lt;sub-command&gt;<br>	init     Create the &quot;vendor&quot; folder and the &quot;vendor.json&quot; file.<br>	list     List and filter existing dependencies and packages.<br>	add      Add packages from $GOPATH.<br>	update   Update packages from $GOPATH.<br>	remove   Remove packages from the vendor folder.<br>	status   Lists any packages missing, out-of-date, or modified locally.<br>	fetch    Add new or update vendor folder packages from remote repository.<br>	sync     Pull packages into vendor folder from remote repository with revisions<br>  	             from vendor.json file.<br>	migrate  Move packages from a legacy tool to the vendor folder with metadata.<br>	get      Like &quot;go get&quot; but copies dependencies into a &quot;vendor&quot; folder.<br>	license  List discovered licenses for the given status or import paths.<br>	shell    Run a &quot;shell&quot; to make multiple sub-commands more efficient for large<br>	             projects.<br><br>	go tool commands that are wrapped:<br>	  `+&lt;status&gt;` package selection may be used with them<br>	fmt, build, install, clean, test, vet, generate, tool<br>	<br>&lt;status&gt;<br>	+local    (l) packages in your project<br>	+external (e) referenced packages in GOPATH but not in current project<br>	+vendor   (v) packages in the vendor folder<br>	+std      (s) packages in the standard library<br><br>	+excluded (x) external packages explicitly excluded from vendoring<br>	+unused   (u) packages in the vendor folder, but unused<br>	+missing  (m) referenced packages but not found<br><br>	+program  (p) package is a main package<br><br>	+outside  +external +missing<br>	+all      +all packages<br></code></pre></td></tr></table></figure>
 
 <p>不过，govendor 由于已经不再维护了，因此其在 M 系列芯片的 Mac 上不可用，而且也不清楚高版本 Go 的兼容性。</p>
-<p>由于工作项目需要使用 govendor，因此我复制了一份代码，处理了部分兼容性问题，目前在我本地（Mac M2）看起来没啥问题。地址：<a class="link"   target="_blank" rel="noopener" href="https://github.com/hyphennn/govendor" >https://github.com/hyphennn/govendor<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> 。但不清楚有没有未知问题。<br>ps. 之所以不 fork，是因为原项目不再维护了，fork 没有任何意义。</p>
+<p>由于工作项目需要使用 govendor，因此我复制了一份代码，处理了部分兼容性问题，目前在我本地（Mac M2）看起来没啥问题。地址：<a target="_blank" rel="noopener" href="https://github.com/hyphennn/govendor">https://github.com/hyphennn/govendor</a> 。但不清楚有没有未知问题。<br>ps. 之所以不 fork，是因为原项目不再维护了，fork 没有任何意义。</p>
 
-		</div>
-
-		
-		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
-			<div class="article-copyright-info-container">
-    <ul>
-        <li><strong>Title:</strong> Go Vendor-时代的眼泪</li>
-        <li><strong>Author:</strong> hyphennn</li>
-        <li><strong>Created at
-                :</strong> 2024-05-22 10:46:36</li>
-        
-            <li>
-                <strong>Updated at
-                    :</strong> 2024-05-28 10:20:44
-            </li>
-        
-        <li>
-            <strong>Link:</strong> https://hyphennn.com/2024/05/22/go-vendor/
-        </li>
-        <li>
-            <strong>
-                License:
-            </strong>
-            
-
-            
-                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
-            
-        </li>
-    </ul>
-</div>
-
-		</div>
-		
-
-		
-
-		
-
-		
-		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
-			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2024/06/07/go-defer-closure/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item">Go defer+闭包的一个小坑</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
-			
-			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2024/04/22/bazel-1/">
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item">Bazel-Next Generation of Build?</span>
-						<span class="post-nav-item">Next posts</span>
-					</span>
-					<span class="right arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-right"></i>
-					</span>
-				</a>
-			</div>
-			
-		</div>
-		
-
-
-		
-	</div>
-
-	
-	<div class="toc-content-container">
-		<div class="post-toc-wrap">
-	<div class="post-toc">
-		<div class="toc-title">On this page</div>
-		<div class="page-title">Go Vendor-时代的眼泪</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Go-Vendor"><span class="nav-text">Go Vendor</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GOPATH"><span class="nav-text">GOPATH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vendor"><span class="nav-text">Vendor</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E4%B8%80-GOPATH-%E6%9C%BA%E5%88%B6"><span class="nav-text">版本一 GOPATH 机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E4%BA%8C-Vendor-%E6%9C%BA%E5%88%B6"><span class="nav-text">版本二 Vendor 机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E4%B8%89-Module-%E6%9C%BA%E5%88%B6"><span class="nav-text">版本三 Module 机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#govendor"><span class="nav-text">govendor</span></a></li></ol></li></ol>
-
-	</div>
-</div>
-	</div>
-	
-</div>
-			</div>
-
-			
-		</div>
-
-		<div class="main-content-footer">
-			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
-    <div class="info-container py-3 text-center">
-        
-        <div class="text-center">
-            &copy;
-            
-              <span>2024</span>
-              -
-            
-            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">hyphennn</a>
-            
                 
-                <p class="post-count space-x-0.5">
-                    <span>
-                        13 posts in total
-                    </span>
-                    
-                </p>
+              </div>
             
-        </div>
-        
-        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
-            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
-            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.2</a></span>
-        </div>
-        
-        
+            <hr/>
             <div>
-                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/tech/" class="category-chain-item">tech</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Go Vendor-时代的眼泪</div>
+      <div>https://hyphennn.com/2024/05/22/go-vendor/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>hyphennn</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 22, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/06/07/go-defer-closure/" title="Go defer+闭包的一个小坑">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Go defer+闭包的一个小坑</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/22/bazel-1/" title="Bazel-Next Generation of Build?">
+                        <span class="hidden-mobile">Bazel-Next Generation of Build?</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
             </div>
-        
-        
-            <script data-swup-reload-script>
-                try {
-                    function odometer_init() {
-                    const elements = document.querySelectorAll('.odometer');
-                    elements.forEach(el => {
-                        new Odometer({
-                            el,
-                            format: '( ddd).dd',
-                            duration: 200
-                        });
-                    });
-                    }
-                    odometer_init();
-                } catch (error) {}
-            </script>
-        
-        
-        
-    </div>  
-</footer>
-		</div>
-	</div>
 
-	
-	<div class="post-tools">
-		<div class="post-tools-container">
-	<ul class="article-tools-list">
-		<!-- TOC aside toggle -->
-		
-		<li class="right-bottom-tools page-aside-toggle">
-			<i class="fa-regular fa-outdent"></i>
-		</li>
-		
-
-		<!-- go comment -->
-		
-	</ul>
-</div>
-	</div>
-	
-
-	<div class="right-side-tools-container">
-		<div class="side-tools-container">
-	<ul class="hidden-tools-list">
-		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
-			<i class="fa-regular fa-magnifying-glass-plus"></i>
-		</li>
-
-		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
-			<i class="fa-regular fa-magnifying-glass-minus"></i>
-		</li>
-
-		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
-			<i class="fa-regular fa-moon"></i>
-		</li>
-
-		<!-- rss -->
-		
-
-		
-
-		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
-			<i class="fa-regular fa-arrow-down"></i>
-		</li>
-	</ul>
-
-	<ul class="visible-tools-list">
-		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
-			<i class="fa-regular fa-cog fa-spin"></i>
-		</li>
-		
-		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
-			<i class="arrow-up fas fa-arrow-up"></i>
-			<span class="percent"></span>
-		</li>
-		
-		
-	</ul>
-</div>
-	</div>
-
-	<div class="image-viewer-container">
-	<img src="">
-</div>
-
-	
-	<div class="search-pop-overlay">
-	<div class="popup search-popup">
-		<div class="search-header">
-			<span class="search-input-field-pre">
-				<i class="fa-solid fa-keyboard"></i>
-			</span>
-			<div class="search-input-container">
-				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Search..." spellcheck="false" type="search" class="search-input">
-			</div>
-			<span class="popup-btn-close">
-				<i class="fa-solid fa-times"></i>
-			</span>
-		</div>
-		<div id="search-result">
-			<div id="no-result">
-				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
-			</div>
-		</div>
-	</div>
-</div>
-	
-
-</main>
-
-
-
-<script src="/js/build/libs/Swup.min.js"></script>
-
-<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
-
-<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
-
-<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
-
-<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
-
-<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
-
-<script>
-    const swup = new Swup({
-        plugins: [
-            new SwupScriptsPlugin({
-                optin: true,
-            }),
-            new SwupProgressPlugin(),
-            new SwupScrollPlugin({
-                offset: 80,
-            }),
-            new SwupSlideTheme({
-                mainElement: ".main-content-body",
-            }),
-            new SwupPreloadPlugin(),
-        ],
-        containers: ["#swup"],
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"kOfjcKCe0eBHkEp1biYqXdFL-gzGzoHsz","appKey":"V0CncmlJItyXE9Acrxrrij83","path":"window.location.pathname","placeholder":"请输入您想说的～","avatar":"retro","meta":["nick","mail"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":true,"serverURLs":"https://kofjckce.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
     });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/hyphennn" target="_blank" rel="nofollow noopener"><span>Product by Hyphennn | Support by Hexo</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        Views: 
+        <span id="leancloud-site-pv"></span>
+        
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        Visitors: 
+        <span id="leancloud-site-uv"></span>
+        
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
 </script>
 
 
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
 
-
-	
-<script src="/js/build/tools/imageViewer.js" type="module"></script>
-
-<script src="/js/build/utils.js" type="module"></script>
-
-<script src="/js/build/main.js" type="module"></script>
-
-<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
-
-<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
-
-<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
-
-<script src="/js/build/layouts/categoryList.js" type="module"></script>
-
-
-
-    
-<script src="/js/build/tools/localSearch.js" type="module"></script>
-
-
-
-
-    
-<script src="/js/build/tools/codeBlock.js" type="module"></script>
-
-
-
-
-    
-<script src="/js/build/layouts/lazyload.js" type="module"></script>
-
-
-
-
-    
-<script src="/js/build/tools/runtime.js"></script>
-
-    
-<script src="/js/build/libs/odometer.min.js"></script>
-
-    
-<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
-
-
+  <script>Fluid.plugins.codeWidget();</script>
 
 
   
-<script src="/js/build/libs/Typed.min.js"></script>
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
 
   
-<script src="/js/build/plugins/typed.js" type="module"></script>
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
 
 
+  <script>Fluid.plugins.imageCaption();</script>
 
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
 
-
-
-
-
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
     
-<script src="/js/build/libs/anime.min.js"></script>
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
 
 
 
 
 
-    
-<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
-
-<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
-
-<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
 
 
+  
 
-
-<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
-
-
-<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
-
-
-
-
-
-	
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
-
 </html>
