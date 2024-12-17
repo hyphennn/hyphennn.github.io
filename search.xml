@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>End&amp;Start</title>
-    <url>/2024/02/23/End-Start/</url>
-    <content><![CDATA[<h1 id="End-Start"><a href="#End-Start" class="headerlink" title="End&amp;Start"></a>End&amp;Start</h1><p>立个 flag：这个周末写点东西～</p>
-]]></content>
-      <categories>
-        <category>daily</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Go GC 调优思路</title>
     <url>/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/</url>
     <content><![CDATA[<h1 id="面向高性能的-Go-GC-调优思路"><a href="#面向高性能的-Go-GC-调优思路" class="headerlink" title="面向高性能的 Go GC 调优思路"></a>面向高性能的 Go GC 调优思路</h1><h2 id="0"><a href="#0" class="headerlink" title="0"></a>0</h2><p>最简单的优化思路是别浪费时间优化了，转 Rust，R 门！</p>
@@ -114,15 +105,6 @@
       </categories>
   </entry>
   <entry>
-    <title>大厂祛魅</title>
-    <url>/2024/04/19/career-review/</url>
-    <content><![CDATA[<h1 id="大厂祛魅"><a href="#大厂祛魅" class="headerlink" title="大厂祛魅"></a>大厂祛魅</h1><p>我给你写个蛋，程序员都在忙着搞程序呢，哪有人看这破博客～</p>
-]]></content>
-      <categories>
-        <category>daily</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Bazel-Next Generation of Build?</title>
     <url>/2024/04/22/bazel-1/</url>
     <content><![CDATA[<h1 id="Bazel-Next-Generation-of-Build"><a href="#Bazel-Next-Generation-of-Build" class="headerlink" title="Bazel: Next Generation of Build?"></a>Bazel: Next Generation of Build?</h1><h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>Bazel 是 Google 开源的一款与 Make、Maven 和 Gradle 类似的开源构建和测试工具， 它使用人类可读的高级构建语言 Starlark，支持多种语言，可为多个平台构建输出。 Bazel 支持任意大小的构建目标，并支持跨多个代码库和大量用户的大型代码库，是 Google 主推的一种构建工具。</p>
@@ -191,6 +173,56 @@
 ]]></content>
       <categories>
         <category>tech</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>End&amp;Start</title>
+    <url>/2024/02/23/End-Start/</url>
+    <content><![CDATA[<h1 id="End-Start"><a href="#End-Start" class="headerlink" title="End&amp;Start"></a>End&amp;Start</h1><p>立个 flag：这个周末写点东西～</p>
+]]></content>
+      <categories>
+        <category>daily</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>go-inline-perf</title>
+    <url>/2024/03/22/go-inline-perf/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Go defer+闭包的一个小坑</title>
+    <url>/2024/06/07/go-defer-closure/</url>
+    <content><![CDATA[<h1 id="Go-defer-闭包的一个小坑"><a href="#Go-defer-闭包的一个小坑" class="headerlink" title="Go defer+闭包的一个小坑"></a>Go defer+闭包的一个小坑</h1><p>今天在写代码的时候，发现一个奇怪的事情，在将无效的逻辑简化之后，可以总结出这样的一段代码：</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="string">&quot;1&quot;</span></span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(<span class="string">&quot;defer only: &quot;</span> + a)</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; fmt.Println(<span class="string">&quot;defer closure: &quot;</span> + a) &#125;()</span><br><span class="line"></span><br><span class="line">	a = <span class="string">&quot;2&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>先让我们想一想，这段代码的输出是什么？我的之前的理解中，显然，这是问 defer 的执行顺序问题，那太简单了，毫无疑问应该输出：</p>
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="code"><pre><span class="line">defer closure: 1</span><br><span class="line">defer only: 1</span><br></pre></td></tr></table></figure></div>
+
+<p>然而，真的执行这段代码之后，我惊讶的发现，真实的输出是：</p>
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="code"><pre><span class="line">defer closure: 2</span><br><span class="line">defer only: 1</span><br></pre></td></tr></table></figure></div>
+<p>这就有些让我费解了，正好借着这个机会，我对 defer&amp; 闭包做了一次系统的整理。</p>
+<h2 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h2><h3 id="预计算"><a href="#预计算" class="headerlink" title="预计算"></a>预计算</h3><p>Go 官方文档对此由如下<a href="">阐述</a></p>
+<p>to be finished</p>
+]]></content>
+      <categories>
+        <category>tech</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>hello-world</title>
+    <url>/2024/01/25/hello-world/</url>
+    <content><![CDATA[<h1 id="Hyphen"><a href="#Hyphen" class="headerlink" title="Hyphen"></a>Hyphen</h1><p>This is a Hello World page</p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Hello Wolrd!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>]]></content>
+      <categories>
+        <category>tech</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>大厂祛魅</title>
+    <url>/2024/04/19/career-review/</url>
+    <content><![CDATA[<h1 id="大厂祛魅"><a href="#大厂祛魅" class="headerlink" title="大厂祛魅"></a>大厂祛魅</h1><p>我给你写个蛋，程序员都在忙着搞程序呢，哪有人看这破博客～</p>
+]]></content>
+      <categories>
+        <category>daily</category>
       </categories>
   </entry>
   <entry>
@@ -354,50 +386,6 @@ u1s1，这个页面真的好丑。。。但是作为一名业余得不能再业�
 </section>]]></content>
   </entry>
   <entry>
-    <title>Go defer+闭包的一个小坑</title>
-    <url>/2024/06/07/go-defer-closure/</url>
-    <content><![CDATA[<h1 id="Go-defer-闭包的一个小坑"><a href="#Go-defer-闭包的一个小坑" class="headerlink" title="Go defer+闭包的一个小坑"></a>Go defer+闭包的一个小坑</h1><p>今天在写代码的时候，发现一个奇怪的事情，在将无效的逻辑简化之后，可以总结出这样的一段代码：</p>
-<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="string">&quot;1&quot;</span></span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(<span class="string">&quot;defer only: &quot;</span> + a)</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; fmt.Println(<span class="string">&quot;defer closure: &quot;</span> + a) &#125;()</span><br><span class="line"></span><br><span class="line">	a = <span class="string">&quot;2&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-<p>先让我们想一想，这段代码的输出是什么？我的之前的理解中，显然，这是问 defer 的执行顺序问题，那太简单了，毫无疑问应该输出：</p>
-<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="code"><pre><span class="line">defer closure: 1</span><br><span class="line">defer only: 1</span><br></pre></td></tr></table></figure></div>
-
-<p>然而，真的执行这段代码之后，我惊讶的发现，真实的输出是：</p>
-<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="code"><pre><span class="line">defer closure: 2</span><br><span class="line">defer only: 1</span><br></pre></td></tr></table></figure></div>
-<p>这就有些让我费解了，正好借着这个机会，我对 defer&amp; 闭包做了一次系统的整理。</p>
-<h2 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h2><h3 id="预计算"><a href="#预计算" class="headerlink" title="预计算"></a>预计算</h3><p>Go 官方文档对此由如下<a href="">阐述</a></p>
-<p>to be finished</p>
-]]></content>
-      <categories>
-        <category>tech</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Only For Hyphen</title>
-    <url>/2018/06/08/i-am-not-hyphen/</url>
-    <content><![CDATA[
-<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="16255f4e3c74c32dd45814d0997021244815720f770b45e8e54046eef72b2389">07cd4cdb5d86168d61f930883885768230d0eb67fd22f5490203cdca469d3dc6921513385862e5e1a576c43ef46697a7157f04571c61b24abdaf365a864df7bb6d034fbd6d06c96c7d96e1de2200c499a51d4d3681e8356b82e7edfb88b896283825929897f3b25ea6dde81c17098d57dcdbb07374fbf3e0a28d785bd6c8fb27167a1d17e624ca8922484502744f73c9492decdd0c490647be4e01d0541cbb12baaf3c7c06589e9578fb6c0e9437d4e1b54c15c0f944794b83ddc60195cc64a99a035cb2c6acac8b39aacf59e166f754a88a750ce2393109ae59b726da9e93d38f5afb41d649252923dfc3270baa8993221d09f4bf75b552fd8a855ec5714df365cb70032d742e495d64df7b09499c5a68b14c69b574519b388340717753c3561a62f1befbbb5a752265f6eb0cca7d0e04886b68425ac9b06fad3e66b501798be8bb07b4a340cf1f3466ac7d5c102ca05e6d0651063f7d321e846a3c00104900c0254ad6dc831ed0cdbca307f914f625aa0c6e6b38de31e15175110193e30da89d056013f79c6e77c0b0bcce29aafc9ebe6375c098e51b6e9b387fd03e87c969fad0381ce20370d0f7ecf6f7a4c35fd184e46f53c0aa5d0ca54515b18cc935cd853c908124967270ecdec546ec952efd803ba6cabfac739f8ef1865c009ca8ecb9b44f9680788a010c8e5e243eca43c9a683cbc3996786dd94f0755d9a7ea9481aff3c52f78e34ee2da6354e7d51f210e13de9572ded2682e8843d68c53f7d24c13cd2e7794ae622d139f4ef0b5cd39aeab24edfb23a35ffa91414d22a36b5b9601295ef3a9090ba248b0a2ff6ae7dd42d4eefbd5da771ac6f617ac21cb6a82b2ec6ea85cf4d7d3965501e2e7f84a38d18ec2c2d347c5ca6cab23af8346ceba68e8596ce6d587436b326ea9df9fe9392b877b9f0179f7bd76cd1d8463c0bd69bd4b464469282b3aad8bfa776cee8bd389447ab19f0222ab9f179d44263a9d19da821daced89481b706708371bddcbd33aab6fd21742f51589e663fe1b1abe080deec82c0302093f37809027b277f8a19ea3994f889623ba1612403939134bda5d7ce3d6f3b2a911284e85bc832d1ad3ce3316cf6d360c8a37908dab19c6cfb0f429442b3b10ae904e29cc44dfb9b8f4407225b16d0f4e50b74bbdae644229de19ee4078f5e7a33dc920e5cd555c312de39ac90259a8e64d9c1f2d91d38595665dd169008186baaf9fbe18492aedf0c441eded6f4c86c5b02aa5daef576a534965804b9350a52051f43f339b2c5245b8ec2bbb71a3037d2b513f154312039f76b8e8080264006940ceb22592a4103314dc339932fe10b60d1ce1ecc6f6f115d4f293c502ad6151505a9e184696a956f58ddd79cd113aef54ca608adbd7c3261727fea34e71580822f768e8fb215a99b6841e03e230b2bf97000a3e4a1beb4659fdbe44a65f4fcc36e4f25c68d698b15e301e565e0c32f5ab7795e62c9ac5168679ef353aa5b498e9f8ac618981887151e92387050fd40d39be75fa1b56bc75298bd55cecf3ef4c5af18ccd6fd512dee8f947ca4c8a6e63c0d12f81e4cad7e7ad7e60a00892d86e38d2a8cd45b2386ab6f7dd14ad6464e2c4af74e5c76313076212d672c532c213f3e0b1efaf3b5b3f3596c3d1576dc6d72a99ba220bb8de9a04038fcf73d4fb798f8f84def4bc3cb1ca8885751c2fc64f325ca7cd571e521aeedf5c3619c348ec1fa9fdfa8d13f1af42535136f090912c2a9693ac83bbe0f60483831dc5618a8588e2e1e4cbc4a40a9b29514f3e50421a4d1d1ef414f112f4082430dca0cdfef656e5f5144cac20263ef76467fe620c211fd8f93dcec71c9086729816c42d55b7b0738891e349bdefe3403c4f99f542021f8c51a0a42111538e24decfcf129ae1b31a4586719c1b65394d56755755490c6f9de08163172d768a678efda32be6c0a25a480219a5fc4bf66d9274ee112d235dcad509c40d5d9b946158daa28b39f4edd1a51240c858c9ef8b604afff603c60c427112e40924012a34d6c5f32f258f3a2839f1d32d15881a333aa5a677af24eceae51f277484cf8a53a7bd441747e73b25542b2244f6196d4d028019e2d650afbf52504361b43d3d39519e7e3e744f4fc69545d21f6ba2a2b9f3a7ed4b31d6752f15b75f6a80095c11e7e4e8bca32de581ba53867b42e7e1469aeb26feca7702e4ceea5089552bbed771d2ca653ec69c4b06618b75203289beb79e15f25c6bad230e06fe747dada5cc3eacf832a91caed39d6ed5e5f18a0d9150f7cd121ad62190df3ac42c17277b5a0e93f9ff042256a35da16f8a0b0ae22751d19de14f3bdc9567c35c2515e2eb6b6e44c3b0e609f51e88ea8a27365e5060ab6ad96c85349cb2284e32c53a2b17c36f0cc29cb3c75d36cdece407ce4231c076998d2f1a6e170ea24bff9dd5004d04b964270ba3ddc62d995e6e2d17d97cd3742d3dfcc254ffdb839aa18ec224b87b995a3440337dce2ab8d6bb26290e33b5ad25ea996af1a922e12d6e1c64f5fcd93c3e70d9a5cc126103cfde0efbb979571ef368a8828f3c2e9d031f68a329aa84bab047a60566d6b522b595cdc37441d79b01ae3a29140ca0cc6a8733cf4d3e6d2b99c8a377d8de83b480be06c3b31432c875bf5259573fd0de16d817c1bb24a02fa5e16a69d007632fae39c757d7f6c38663cc1bd006b54f98b9505bd2ef83d43e13c342b7824b665f694990bb5425d1b839c551e96da05bdc1c16b1782cb6f72e8bfcb4e4733118e5848a8490d6d6a5271856888091585d71a46bcfa3824760a78438bdb8458040f3b9f19b838051894e0fe466acd977b3291e8e6fa2e3e97e766163011913165621bf0d3fc0adc51784f975b56248e950101c4be53717e8bcdac55f299391638976f15a3738913eefe6766550ed326f04fa4852f1cf2afc42831d46a8ce46eec09cfbeba2e5ff54e81e58ea770bbdb710d2edb47cc11d51e3abf8a8160a5669b27bdf4e451aaa0aacb63daba6acde01a8deb7e3d29bc9a69137bada675cfe3ed5aa074bcc0f36feea525f9dd32211d1dd58cf9a038f9818e5799a54321d245258f82b054060c943b0ac5d8ca8220897ed7ff8aa45ea3a6b76f00b69205d7ef65b45e1e456b061b4409f8593e095f92fd2c40deedfd2bb010868a3268ce9c6a008804d3b68939868502ea96badcbdf7109ae1f7c5090cca53253ab18e2ccce3105105935540d2933f71020d8b22f4118e8beb7036d6bf2b32b58383f16043e7635d6f2092413b66576822e745680f35f49b7a090c4ec8a3a421c66aa5c31949a651b46e2b8ff93432a927abe713961baca30bee4968f43fff8ec0f4c8317eea643eb8192193d227a8331a489c73033daa65916b53f8eb39459cd50b684d8c90b8ed8900ebaa10aac732d1c2887207f2622cfdbbcee0adfd2eb17c1a16962640c4b41c75b0ce5847f829c31bf25226743e119e001abd3bcddf58590e873a6e6a461eeffefec7fb3a63dd26596e82a775af76ccd26b42d7aa3e6eea8a755aa97e75bc12d3833444bd0592b6018f36d4af74bcc596a027e498ed856e5d54c397414652493a36bc9f43c2b443079f5d290a69df8c84a2dac3027b41bd6ace63ec0909fc1af2007581bdbd0b652d3437a229eb2c5d4c395841fb7fa8070fa12d95ff6b369aea4decaa1aee47a57330bd69e428e172c59708ddeefd7665e7ac7872ca4c920121fc6caaea92b661d993a8693ec569894a5d5055707234053f869f1d3c4fdd93f8f116040c6c223ad0b7d72fbb2a19f236bf1d194b02</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">wobuguan</span>
-      </label>
-    </div>
-  </div>
-</div>
-<link href="/css/hbe.style.css" rel="stylesheet" type="text/css"><script data-swup-reload-script type="module" src="/js/plugins/hbe.js"></script>
-<script data-swup-reload-script type="module">
-import {initHBE} from "/js/plugins/hbe.js";
-  console.log("hexo-blog-encrypt: loaded.");
-    initHBE();
-</script>
-]]></content>
-      <categories>
-        <category>self</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Go Vendor-时代的眼泪</title>
     <url>/2024/05/22/go-vendor/</url>
     <content><![CDATA[<h1 id="Go-Vendor"><a href="#Go-Vendor" class="headerlink" title="Go Vendor"></a>Go Vendor</h1><p>go vendor 也算时代的眼泪了，在 go1.5～1.11 之间被相对广泛的使用，在 1.11之后基本就退出历史舞台了，原因无他，go module 太好用了。 即便政治正确一点地说，它和 cargo、bazel 相比功能上没有那么丰富，但其轻量、简便在包管理工具中也难寻其右。</p>
@@ -486,9 +474,30 @@ import {initHBE} from "/js/plugins/hbe.js";
       </categories>
   </entry>
   <entry>
-    <title>go-inline-perf</title>
-    <url>/2024/03/22/go-inline-perf/</url>
-    <content><![CDATA[]]></content>
+    <title>Only For Hyphen</title>
+    <url>/2018/06/08/i-am-not-hyphen/</url>
+    <content><![CDATA[
+<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="16255f4e3c74c32dd45814d0997021244815720f770b45e8e54046eef72b2389">07cd4cdb5d86168d61f930883885768230d0eb67fd22f5490203cdca469d3dc6921513385862e5e1a576c43ef46697a7157f04571c61b24abdaf365a864df7bb6d034fbd6d06c96c7d96e1de2200c499a51d4d3681e8356b82e7edfb88b896283825929897f3b25ea6dde81c17098d57dcdbb07374fbf3e0a28d785bd6c8fb27167a1d17e624ca8922484502744f73c9492decdd0c490647be4e01d0541cbb12baaf3c7c06589e9578fb6c0e9437d4e1b54c15c0f944794b83ddc60195cc64a99a035cb2c6acac8b39aacf59e166f754a88a750ce2393109ae59b726da9e93d38f5afb41d649252923dfc3270baa8993221d09f4bf75b552fd8a855ec5714df365cb70032d742e495d64df7b09499c5a68b14c69b574519b388340717753c3561a62f1befbbb5a752265f6eb0cca7d0e04886b68425ac9b06fad3e66b501798be8bb07b4a340cf1f3466ac7d5c102ca05e6d0651063f7d321e846a3c00104900c0254ad6dc831ed0cdbca307f914f625aa0c6e6b38de31e15175110193e30da89d056013f79c6e77c0b0bcce29aafc9ebe6375c098e51b6e9b387fd03e87c969fad0381ce20370d0f7ecf6f7a4c35fd184e46f53c0aa5d0ca54515b18cc935cd853c908124967270ecdec546ec952efd803ba6cabfac739f8ef1865c009ca8ecb9b44f9680788a010c8e5e243eca43c9a683cbc3996786dd94f0755d9a7ea9481aff3c52f78e34ee2da6354e7d51f210e13de9572ded2682e8843d68c53f7d24c13cd2e7794ae622d139f4ef0b5cd39aeab24edfb23a35ffa91414d22a36b5b9601295ef3a9090ba248b0a2ff6ae7dd42d4eefbd5da771ac6f617ac21cb6a82b2ec6ea85cf4d7d3965501e2e7f84a38d18ec2c2d347c5ca6cab23af8346ceba68e8596ce6d587436b326ea9df9fe9392b877b9f0179f7bd76cd1d8463c0bd69bd4b464469282b3aad8bfa776cee8bd389447ab19f0222ab9f179d44263a9d19da821daced89481b706708371bddcbd33aab6fd21742f51589e663fe1b1abe080deec82c0302093f37809027b277f8a19ea3994f889623ba1612403939134bda5d7ce3d6f3b2a911284e85bc832d1ad3ce3316cf6d360c8a37908dab19c6cfb0f429442b3b10ae904e29cc44dfb9b8f4407225b16d0f4e50b74bbdae644229de19ee4078f5e7a33dc920e5cd555c312de39ac90259a8e64d9c1f2d91d38595665dd169008186baaf9fbe18492aedf0c441eded6f4c86c5b02aa5daef576a534965804b9350a52051f43f339b2c5245b8ec2bbb71a3037d2b513f154312039f76b8e8080264006940ceb22592a4103314dc339932fe10b60d1ce1ecc6f6f115d4f293c502ad6151505a9e184696a956f58ddd79cd113aef54ca608adbd7c3261727fea34e71580822f768e8fb215a99b6841e03e230b2bf97000a3e4a1beb4659fdbe44a65f4fcc36e4f25c68d698b15e301e565e0c32f5ab7795e62c9ac5168679ef353aa5b498e9f8ac618981887151e92387050fd40d39be75fa1b56bc75298bd55cecf3ef4c5af18ccd6fd512dee8f947ca4c8a6e63c0d12f81e4cad7e7ad7e60a00892d86e38d2a8cd45b2386ab6f7dd14ad6464e2c4af74e5c76313076212d672c532c213f3e0b1efaf3b5b3f3596c3d1576dc6d72a99ba220bb8de9a04038fcf73d4fb798f8f84def4bc3cb1ca8885751c2fc64f325ca7cd571e521aeedf5c3619c348ec1fa9fdfa8d13f1af42535136f090912c2a9693ac83bbe0f60483831dc5618a8588e2e1e4cbc4a40a9b29514f3e50421a4d1d1ef414f112f4082430dca0cdfef656e5f5144cac20263ef76467fe620c211fd8f93dcec71c9086729816c42d55b7b0738891e349bdefe3403c4f99f542021f8c51a0a42111538e24decfcf129ae1b31a4586719c1b65394d56755755490c6f9de08163172d768a678efda32be6c0a25a480219a5fc4bf66d9274ee112d235dcad509c40d5d9b946158daa28b39f4edd1a51240c858c9ef8b604afff603c60c427112e40924012a34d6c5f32f258f3a2839f1d32d15881a333aa5a677af24eceae51f277484cf8a53a7bd441747e73b25542b2244f6196d4d028019e2d650afbf52504361b43d3d39519e7e3e744f4fc69545d21f6ba2a2b9f3a7ed4b31d6752f15b75f6a80095c11e7e4e8bca32de581ba53867b42e7e1469aeb26feca7702e4ceea5089552bbed771d2ca653ec69c4b06618b75203289beb79e15f25c6bad230e06fe747dada5cc3eacf832a91caed39d6ed5e5f18a0d9150f7cd121ad62190df3ac42c17277b5a0e93f9ff042256a35da16f8a0b0ae22751d19de14f3bdc9567c35c2515e2eb6b6e44c3b0e609f51e88ea8a27365e5060ab6ad96c85349cb2284e32c53a2b17c36f0cc29cb3c75d36cdece407ce4231c076998d2f1a6e170ea24bff9dd5004d04b964270ba3ddc62d995e6e2d17d97cd3742d3dfcc254ffdb839aa18ec224b87b995a3440337dce2ab8d6bb26290e33b5ad25ea996af1a922e12d6e1c64f5fcd93c3e70d9a5cc126103cfde0efbb979571ef368a8828f3c2e9d031f68a329aa84bab047a60566d6b522b595cdc37441d79b01ae3a29140ca0cc6a8733cf4d3e6d2b99c8a377d8de83b480be06c3b31432c875bf5259573fd0de16d817c1bb24a02fa5e16a69d007632fae39c757d7f6c38663cc1bd006b54f98b9505bd2ef83d43e13c342b7824b665f694990bb5425d1b839c551e96da05bdc1c16b1782cb6f72e8bfcb4e4733118e5848a8490d6d6a5271856888091585d71a46bcfa3824760a78438bdb8458040f3b9f19b838051894e0fe466acd977b3291e8e6fa2e3e97e766163011913165621bf0d3fc0adc51784f975b56248e950101c4be53717e8bcdac55f299391638976f15a3738913eefe6766550ed326f04fa4852f1cf2afc42831d46a8ce46eec09cfbeba2e5ff54e81e58ea770bbdb710d2edb47cc11d51e3abf8a8160a5669b27bdf4e451aaa0aacb63daba6acde01a8deb7e3d29bc9a69137bada675cfe3ed5aa074bcc0f36feea525f9dd32211d1dd58cf9a038f9818e5799a54321d245258f82b054060c943b0ac5d8ca8220897ed7ff8aa45ea3a6b76f00b69205d7ef65b45e1e456b061b4409f8593e095f92fd2c40deedfd2bb010868a3268ce9c6a008804d3b68939868502ea96badcbdf7109ae1f7c5090cca53253ab18e2ccce3105105935540d2933f71020d8b22f4118e8beb7036d6bf2b32b58383f16043e7635d6f2092413b66576822e745680f35f49b7a090c4ec8a3a421c66aa5c31949a651b46e2b8ff93432a927abe713961baca30bee4968f43fff8ec0f4c8317eea643eb8192193d227a8331a489c73033daa65916b53f8eb39459cd50b684d8c90b8ed8900ebaa10aac732d1c2887207f2622cfdbbcee0adfd2eb17c1a16962640c4b41c75b0ce5847f829c31bf25226743e119e001abd3bcddf58590e873a6e6a461eeffefec7fb3a63dd26596e82a775af76ccd26b42d7aa3e6eea8a755aa97e75bc12d3833444bd0592b6018f36d4af74bcc596a027e498ed856e5d54c397414652493a36bc9f43c2b443079f5d290a69df8c84a2dac3027b41bd6ace63ec0909fc1af2007581bdbd0b652d3437a229eb2c5d4c395841fb7fa8070fa12d95ff6b369aea4decaa1aee47a57330bd69e428e172c59708ddeefd7665e7ac7872ca4c920121fc6caaea92b661d993a8693ec569894a5d5055707234053f869f1d3c4fdd93f8f116040c6c223ad0b7d72fbb2a19f236bf1d194b02</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">wobuguan</span>
+      </label>
+    </div>
+  </div>
+</div>
+<link href="/css/hbe.style.css" rel="stylesheet" type="text/css"><script data-swup-reload-script type="module" src="/js/plugins/hbe.js"></script>
+<script data-swup-reload-script type="module">
+import {initHBE} from "/js/plugins/hbe.js";
+  console.log("hexo-blog-encrypt: loaded.");
+    initHBE();
+</script>
+]]></content>
+      <categories>
+        <category>self</category>
+      </categories>
   </entry>
   <entry>
     <title>Infra 的创新悖论</title>
@@ -505,6 +514,11 @@ import {initHBE} from "/js/plugins/hbe.js";
       <categories>
         <category>tech</category>
       </categories>
+  </entry>
+  <entry>
+    <title>only-for-me</title>
+    <url>/2017/06/08/only-for-me/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>逃离北京？</title>
@@ -534,20 +548,6 @@ import {initHBE} from "/js/plugins/hbe.js";
 ]]></content>
       <categories>
         <category>daily</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>only-for-me</title>
-    <url>/2017/06/08/only-for-me/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>hello-world</title>
-    <url>/2024/01/25/hello-world/</url>
-    <content><![CDATA[<h1 id="Hyphen"><a href="#Hyphen" class="headerlink" title="Hyphen"></a>Hyphen</h1><p>This is a Hello World page</p>
-<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Hello Wolrd!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>]]></content>
-      <categories>
-        <category>tech</category>
       </categories>
   </entry>
 </search>
