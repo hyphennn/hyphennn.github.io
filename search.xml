@@ -238,6 +238,11 @@ u1s1，这个页面真的好丑。。。但是作为一名业余得不能再业�
 </div>]]></content>
   </entry>
   <entry>
+    <title>go-inline-perf</title>
+    <url>/2024/03/22/go-inline-perf/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>Go defer+闭包的一个小坑</title>
     <url>/2024/06/07/go-defer-closure/</url>
     <content><![CDATA[<h1 id="Go-defer-闭包的一个小坑"><a href="#Go-defer-闭包的一个小坑" class="headerlink" title="Go defer+闭包的一个小坑"></a>Go defer+闭包的一个小坑</h1><p>今天在写代码的时候，发现一个奇怪的事情，在将无效的逻辑简化之后，可以总结出这样的一段代码：</p>
@@ -254,11 +259,6 @@ u1s1，这个页面真的好丑。。。但是作为一名业余得不能再业�
       <categories>
         <category>tech</category>
       </categories>
-  </entry>
-  <entry>
-    <title>go-inline-perf</title>
-    <url>/2024/03/22/go-inline-perf/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>Go Vendor-时代的眼泪</title>
