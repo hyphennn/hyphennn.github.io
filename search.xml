@@ -10,67 +10,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Bazel-Next Generation of Build?</title>
-    <url>/2024/04/22/bazel-1/</url>
-    <content><![CDATA[<h1 id="Bazel-Next-Generation-of-Build"><a href="#Bazel-Next-Generation-of-Build" class="headerlink" title="Bazel: Next Generation of Build?"></a>Bazel: Next Generation of Build?</h1><h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>Bazel 是 Google 开源的一款与 Make、Maven 和 Gradle 类似的开源构建和测试工具， 它使用人类可读的高级构建语言 Starlark，支持多种语言，可为多个平台构建输出。 Bazel 支持任意大小的构建目标，并支持跨多个代码库和大量用户的大型代码库，是 Google 主推的一种构建工具。</p>
-<h3 id="Bazel-与其他构建工具的区别"><a href="#Bazel-与其他构建工具的区别" class="headerlink" title="Bazel 与其他构建工具的区别"></a>Bazel 与其他构建工具的区别</h3><ul>
-<li>基于任务（task）的构建系统</li>
-</ul>
-<p>在基于任务的构建系统中，基本的工作单元是任务。每个任务都是可以执行任何类型的逻辑的脚本，而任务将其他任务指定为必须在其之前运行的依赖项。目前使用的主要大多数构建系统（例如 Ant、Maven、Gradle）都基于任务。</p>
-<p>基于任务的构建系统往往都会面临一个问题：程序员的权力过大。因为脚本能执行的动作太丰富，构建系统本身完全不知道脚本在做什么，所以它必须在如何规划和执行构建步骤时非常保守，从而导致性能很差。此外，系统也没有办法确认每个脚本的确在做以及正确完成它声称要完成的工作，因此系统往往会变得非常复杂。这就产生了两个问题：难以并发。因为系统无法了解脚本是否并发安全，因此往往采用串行的方案。难以增量构建。</p>
-<ul>
-<li>基于制品（Artifact）的构建工具</li>
-</ul>
-<p>基于制品的构建工具采用了完全不一样的逻辑，在这样的系统中，程序员的权力被大幅缩减，「任务」转为由构建系统制定，程序员可以对任务做有限的配置，但不能决定任务何时执行、如何执行。程序员只能指定「依赖项」和「构建目标」，由构建系统决定如何执行构建。</p>
-<p>具体到 Bazel 来说，Bazel 提供了一系列「rule」，这些 rule 既可以是官方团队维护的又有可以是第三方维护的。程序员在使用 Bazel 时，只需要指定所使用的 rule，构建目标以及依赖项；Bazel 将自动解析依赖关系，并尽可能以最高效率来完成构建。</p>
-<h3 id="Why-Bazel？"><a href="#Why-Bazel？" class="headerlink" title="Why Bazel？"></a>Why Bazel？</h3><ul>
-<li>fast &amp; correct</li>
-<li>高扩展性，多语言支持</li>
-<li>对大仓友好</li>
-<li>限制程序员的权力</li>
-</ul>
-<h2 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>当用户告诉 Bazel 要构建某个 Target 的时候，Bazel 会分析这个文件如何构建（构建动作定义为 Action，和其他构建系统的 Task 大同小异），如果 Target 依赖了其他 Target，Bazel 会进一步分析依赖的 Target 又是如何构建生成的，这样一层层分析下去，最终绘制出完整的执行计划。</p>
-<p>这里的 Action 是 Bazel 的核心概念，也是 Bazel 区分于其他构建工具的重要因素：Action 由 Rule 决定，本质上是 Rule 的实例化；而 Rule 不由构建者决定，构建者只能声明使用了某个 Rule。更具体的来说，Rule 是剥离于项目外的，由 Bazel 官方开发，同时对外暴露相关定义，从而允许第三方开发者开发自定义 Rule。</p>
-<img src="/2024/04/22/bazel-1/task.png" class="" title="Bazel 原理">
-
-<p>举个🌰，下面是两个 BUILD.Bazel 文件( Bazel 描述文件)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs starlark">// main/BUILD.bazel<br>cc_binary(<br>    name = &quot;hello-world&quot;,<br>    srcs = [&quot;hello-world.cc&quot;],<br>    deps = [<br>        &quot;:hello-greet&quot;,<br>        &quot;//lib:hello-time&quot;<br>    ]<br>)<br><br>cc_library(<br>    name = &quot;hello-greet&quot;,<br>    srcs = [&quot;hello-greet.cc&quot;],<br>    hdrs = [&quot;hello-greet.h&quot;]<br>)<br><br>// lib/BUILD.bazel<br>cc_library(<br>    name = &quot;hello-time&quot;,<br>    srcs = [&quot;hello-time.cc&quot;],<br>    hdrs = [&quot;hello-time.h&quot;],<br>    deps = [<br>        &quot;:sum&quot;<br>        &quot;//proto:example_data&quot;<br>    ],<br>    visibility = [&quot;//main:__pkg__&quot;]<br>)<br><br>cc_library(<br>    name = &quot;sum&quot;,<br>    srcs = [&quot;sum.cpp&quot;],<br>    hdrs = [&quot;sum.h&quot;],<br>)<br></code></pre></td></tr></table></figure>
-
-
-<p>最终，Bazel 会生成类似于如下的编译产物：</p>
-<img src="/2024/04/22/bazel-1/process.png" class="" title="编译过程">
-
-<h3 id="并行编译"><a href="#并行编译" class="headerlink" title="并行编译"></a>并行编译</h3><p>Bazel 精准的知道每个 Action 依赖哪些文件，这使得没有相互依赖关系的 Action 可以并行执行，而不用担心竞争问题。因此我们可以充分利用多核 CPU 的特性，尽可能提高并发，优化构建效率。</p>
-<h3 id="增量构建"><a href="#增量构建" class="headerlink" title="增量构建"></a>增量构建</h3><p>Bazel 会检测本地文件系统是否保留着上一次构建的 outputs，如果有，此时 Bazel 只需要分析 inputs, commands 和 envs 和上次相比有没有改变，没有改变就直接跳过该 Action 的执行。尽管这个功能很多现代构建工具都支持，但 Bazel 仍有独特的优势：更快，更准。</p>
-<p>这是因为：Bazel 采用了 Client&#x2F;Server 架构，当用户键入 Bazel build 命令时，调用的是 Bazel 的 client 工具，而 client 会拉起 server，并通过 grpc 协议将请求 (buildRequest) 发送给它。由 server 负责配置的加载，ActionGraph 的生成和执行。构建结束后，Server 并不会立即销毁，而 ActionGraph 也会一直保存在内存中。当用户第二次发起构建时，Bazel 会检测工作空间的哪些文件发生了改变，并更新 ActionGraph。如果没有文件改变，就会直接复用上一次的 ActionGraph 进行分析。</p>
-<h3 id="封闭性"><a href="#封闭性" class="headerlink" title="封闭性"></a>封闭性</h3><p>Bazel 将构建分为多个 action，单个 action 被要求是「封闭」的，这意味着：在任何时间、任何场景，相同的 action 总应该获得相同的结果。封闭性是 Bazel 远程缓存与远程执行的基础。通常来说，Bazel 的 rule 会尽最大可能满足封闭性。</p>
-<h2 id="远程执行"><a href="#远程执行" class="headerlink" title="远程执行"></a>远程执行</h2><p>在上述的架构中，我们发现，既然 Bazel Action 的执行是封闭的，那么它在哪里执行，有谁执行，便不再重要，因此，一个直观的想法便出现了：为什么不能在远程执行构建，本地只需要下载产物即可呢？远程缓存和远程构建便是 bazel 在这方面的实践。</p>
-<h3 id="远程缓存"><a href="#远程缓存" class="headerlink" title="远程缓存"></a>远程缓存</h3><p>因为 Action 满足封闭性，即相同的 Action 信息一定产生相同的结果，因此可以建立 Action 到 ActionResult 的映射。为了便于索引，Bazel 把 Action 信息通过 sha256 哈希算法压缩成摘要 (Digest)，把 Digest 到 ActionResult 的映射存储在云端，就可以实现 Action 的远程缓存。其他用户&#x2F;机器在执行某个 Action 的时候，可以先查询此 Action 是否存在。如果存在，直接复用即可。</p>
-<p>远程缓存的更多信息可以参见：<a href="https://km.sankuai.com/collabpage/2006036512">https://km.sankuai.com/collabpage/2006036512</a></p>
-<h3 id="远程构建"><a href="#远程构建" class="headerlink" title="远程构建"></a>远程构建</h3><p>更进一步的，既然 ActionResult 可以被不同的 Bazel 任务共享，说明 ActionResult 和 Action 在哪里执行并没有关系。因此，Bazel 在构建时，可以把 Action 发送给另一台服务器执行，对方执行完，向 CAS 上传 ActionResult，然后本地再下载。</p>
-<p>远程构建的更多信息可以参见：<a href="https://km.sankuai.com/collabpage/2113624250">https://km.sankuai.com/collabpage/2113624250</a></p>
-<h2 id="挑战-No-Silver-Bullet"><a href="#挑战-No-Silver-Bullet" class="headerlink" title="挑战- No Silver Bullet"></a>挑战- No Silver Bullet</h2><ul>
-<li>封闭性</li>
-</ul>
-<p>毫无疑问，「封闭」是远程执行的生命线，无论是增量构建还是远程执行，但是，想要真正做到封闭性并不容易，尤其是对于 C++ 这类语言，大部分 C++ 项目都对本地缓存存在严格的要求，如 gcc 版本，lib 库等等，这些都是封闭性的天敌。如何提供封闭性更好的 rule，以及解决不封闭带来的诸多问题，始终是 Bazel 的重要挑战。</p>
-<ul>
-<li>远程构建</li>
-</ul>
-<p>远程构建是 Bazel 的核心发展目标之一，如果没有远程构建，Bazel 只是一个优秀的构建工具，但远程构建则使得 Bazel 能够发展为支撑企业级别的大型分布式构建系统。但是，必须承认的是，远程构建仍然还在发展阶段，许多问题仍然有待解决。</p>
-<ul>
-<li>规模</li>
-</ul>
-<p>事实上，Bazel 的优势也存在一定的局限性，因为其最初设计目标是为了解决谷歌内部大仓的构建问题，因此天然倾向于大规模、多语言、多维护人员的大型仓库，为了对大仓友好付出了许多其他方面的代价，尽管对于大仓而言，这些代价相较于得到的优势可接受甚至微不足道，但对于普通仓库而言则未必如此。归根结底，这是规模的问题。</p>
-<blockquote>
-<p>2020年，有 issue 要求在 k8s 项目中移除 Bazel (<a href="https://github.com/kubernetes/kubernetes/issues/88553)%EF%BC%8C%E6%AD%A4">https://github.com/kubernetes/kubernetes/issues/88553)，此</a> issue 在社区引发了热烈的讨论，并且最终在 2021 年宣布通过并合入主分支。总结此 issue，核心原因是：</p>
-<p>k8s 本身是单语言（Go）项目，早期引入 Bazel 的是为了使用构建缓存，但 Go 后续支持了构建缓存，此时 Bazel 对于 k8s 而言几乎没有优势，反而会为了维护 Bazel 和 go-build 两套构建工具付出很大的代价。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>tech</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Go GC 调优思路</title>
     <url>/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/</url>
     <content><![CDATA[<h1 id="面向高性能的-Go-GC-调优思路"><a href="#面向高性能的-Go-GC-调优思路" class="headerlink" title="面向高性能的 Go GC 调优思路"></a>面向高性能的 Go GC 调优思路</h1><h2 id="0"><a href="#0" class="headerlink" title="0"></a>0</h2><p>最简单的优化思路是别浪费时间优化了，转 Rust，R 门！</p>
@@ -147,6 +86,76 @@
 <img src="/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/heap-status-nm.png" class="" title="UseNormalMap堆状态">]]></content>
       <categories>
         <category>tech</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Bazel-Next Generation of Build?</title>
+    <url>/2024/04/22/bazel-1/</url>
+    <content><![CDATA[<h1 id="Bazel-Next-Generation-of-Build"><a href="#Bazel-Next-Generation-of-Build" class="headerlink" title="Bazel: Next Generation of Build?"></a>Bazel: Next Generation of Build?</h1><h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>Bazel 是 Google 开源的一款与 Make、Maven 和 Gradle 类似的开源构建和测试工具， 它使用人类可读的高级构建语言 Starlark，支持多种语言，可为多个平台构建输出。 Bazel 支持任意大小的构建目标，并支持跨多个代码库和大量用户的大型代码库，是 Google 主推的一种构建工具。</p>
+<h3 id="Bazel-与其他构建工具的区别"><a href="#Bazel-与其他构建工具的区别" class="headerlink" title="Bazel 与其他构建工具的区别"></a>Bazel 与其他构建工具的区别</h3><ul>
+<li>基于任务（task）的构建系统</li>
+</ul>
+<p>在基于任务的构建系统中，基本的工作单元是任务。每个任务都是可以执行任何类型的逻辑的脚本，而任务将其他任务指定为必须在其之前运行的依赖项。目前使用的主要大多数构建系统（例如 Ant、Maven、Gradle）都基于任务。</p>
+<p>基于任务的构建系统往往都会面临一个问题：程序员的权力过大。因为脚本能执行的动作太丰富，构建系统本身完全不知道脚本在做什么，所以它必须在如何规划和执行构建步骤时非常保守，从而导致性能很差。此外，系统也没有办法确认每个脚本的确在做以及正确完成它声称要完成的工作，因此系统往往会变得非常复杂。这就产生了两个问题：难以并发。因为系统无法了解脚本是否并发安全，因此往往采用串行的方案。难以增量构建。</p>
+<ul>
+<li>基于制品（Artifact）的构建工具</li>
+</ul>
+<p>基于制品的构建工具采用了完全不一样的逻辑，在这样的系统中，程序员的权力被大幅缩减，「任务」转为由构建系统制定，程序员可以对任务做有限的配置，但不能决定任务何时执行、如何执行。程序员只能指定「依赖项」和「构建目标」，由构建系统决定如何执行构建。</p>
+<p>具体到 Bazel 来说，Bazel 提供了一系列「rule」，这些 rule 既可以是官方团队维护的又有可以是第三方维护的。程序员在使用 Bazel 时，只需要指定所使用的 rule，构建目标以及依赖项；Bazel 将自动解析依赖关系，并尽可能以最高效率来完成构建。</p>
+<h3 id="Why-Bazel？"><a href="#Why-Bazel？" class="headerlink" title="Why Bazel？"></a>Why Bazel？</h3><ul>
+<li>fast &amp; correct</li>
+<li>高扩展性，多语言支持</li>
+<li>对大仓友好</li>
+<li>限制程序员的权力</li>
+</ul>
+<h2 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>当用户告诉 Bazel 要构建某个 Target 的时候，Bazel 会分析这个文件如何构建（构建动作定义为 Action，和其他构建系统的 Task 大同小异），如果 Target 依赖了其他 Target，Bazel 会进一步分析依赖的 Target 又是如何构建生成的，这样一层层分析下去，最终绘制出完整的执行计划。</p>
+<p>这里的 Action 是 Bazel 的核心概念，也是 Bazel 区分于其他构建工具的重要因素：Action 由 Rule 决定，本质上是 Rule 的实例化；而 Rule 不由构建者决定，构建者只能声明使用了某个 Rule。更具体的来说，Rule 是剥离于项目外的，由 Bazel 官方开发，同时对外暴露相关定义，从而允许第三方开发者开发自定义 Rule。</p>
+<img src="/2024/04/22/bazel-1/task.png" class="" title="Bazel 原理">
+
+<p>举个🌰，下面是两个 BUILD.Bazel 文件( Bazel 描述文件)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs starlark">// main/BUILD.bazel<br>cc_binary(<br>    name = &quot;hello-world&quot;,<br>    srcs = [&quot;hello-world.cc&quot;],<br>    deps = [<br>        &quot;:hello-greet&quot;,<br>        &quot;//lib:hello-time&quot;<br>    ]<br>)<br><br>cc_library(<br>    name = &quot;hello-greet&quot;,<br>    srcs = [&quot;hello-greet.cc&quot;],<br>    hdrs = [&quot;hello-greet.h&quot;]<br>)<br><br>// lib/BUILD.bazel<br>cc_library(<br>    name = &quot;hello-time&quot;,<br>    srcs = [&quot;hello-time.cc&quot;],<br>    hdrs = [&quot;hello-time.h&quot;],<br>    deps = [<br>        &quot;:sum&quot;<br>        &quot;//proto:example_data&quot;<br>    ],<br>    visibility = [&quot;//main:__pkg__&quot;]<br>)<br><br>cc_library(<br>    name = &quot;sum&quot;,<br>    srcs = [&quot;sum.cpp&quot;],<br>    hdrs = [&quot;sum.h&quot;],<br>)<br></code></pre></td></tr></table></figure>
+
+
+<p>最终，Bazel 会生成类似于如下的编译产物：</p>
+<img src="/2024/04/22/bazel-1/process.png" class="" title="编译过程">
+
+<h3 id="并行编译"><a href="#并行编译" class="headerlink" title="并行编译"></a>并行编译</h3><p>Bazel 精准的知道每个 Action 依赖哪些文件，这使得没有相互依赖关系的 Action 可以并行执行，而不用担心竞争问题。因此我们可以充分利用多核 CPU 的特性，尽可能提高并发，优化构建效率。</p>
+<h3 id="增量构建"><a href="#增量构建" class="headerlink" title="增量构建"></a>增量构建</h3><p>Bazel 会检测本地文件系统是否保留着上一次构建的 outputs，如果有，此时 Bazel 只需要分析 inputs, commands 和 envs 和上次相比有没有改变，没有改变就直接跳过该 Action 的执行。尽管这个功能很多现代构建工具都支持，但 Bazel 仍有独特的优势：更快，更准。</p>
+<p>这是因为：Bazel 采用了 Client&#x2F;Server 架构，当用户键入 Bazel build 命令时，调用的是 Bazel 的 client 工具，而 client 会拉起 server，并通过 grpc 协议将请求 (buildRequest) 发送给它。由 server 负责配置的加载，ActionGraph 的生成和执行。构建结束后，Server 并不会立即销毁，而 ActionGraph 也会一直保存在内存中。当用户第二次发起构建时，Bazel 会检测工作空间的哪些文件发生了改变，并更新 ActionGraph。如果没有文件改变，就会直接复用上一次的 ActionGraph 进行分析。</p>
+<h3 id="封闭性"><a href="#封闭性" class="headerlink" title="封闭性"></a>封闭性</h3><p>Bazel 将构建分为多个 action，单个 action 被要求是「封闭」的，这意味着：在任何时间、任何场景，相同的 action 总应该获得相同的结果。封闭性是 Bazel 远程缓存与远程执行的基础。通常来说，Bazel 的 rule 会尽最大可能满足封闭性。</p>
+<h2 id="远程执行"><a href="#远程执行" class="headerlink" title="远程执行"></a>远程执行</h2><p>在上述的架构中，我们发现，既然 Bazel Action 的执行是封闭的，那么它在哪里执行，有谁执行，便不再重要，因此，一个直观的想法便出现了：为什么不能在远程执行构建，本地只需要下载产物即可呢？远程缓存和远程构建便是 bazel 在这方面的实践。</p>
+<h3 id="远程缓存"><a href="#远程缓存" class="headerlink" title="远程缓存"></a>远程缓存</h3><p>因为 Action 满足封闭性，即相同的 Action 信息一定产生相同的结果，因此可以建立 Action 到 ActionResult 的映射。为了便于索引，Bazel 把 Action 信息通过 sha256 哈希算法压缩成摘要 (Digest)，把 Digest 到 ActionResult 的映射存储在云端，就可以实现 Action 的远程缓存。其他用户&#x2F;机器在执行某个 Action 的时候，可以先查询此 Action 是否存在。如果存在，直接复用即可。</p>
+<p>远程缓存的更多信息可以参见：<a href="https://km.sankuai.com/collabpage/2006036512">https://km.sankuai.com/collabpage/2006036512</a></p>
+<h3 id="远程构建"><a href="#远程构建" class="headerlink" title="远程构建"></a>远程构建</h3><p>更进一步的，既然 ActionResult 可以被不同的 Bazel 任务共享，说明 ActionResult 和 Action 在哪里执行并没有关系。因此，Bazel 在构建时，可以把 Action 发送给另一台服务器执行，对方执行完，向 CAS 上传 ActionResult，然后本地再下载。</p>
+<p>远程构建的更多信息可以参见：<a href="https://km.sankuai.com/collabpage/2113624250">https://km.sankuai.com/collabpage/2113624250</a></p>
+<h2 id="挑战-No-Silver-Bullet"><a href="#挑战-No-Silver-Bullet" class="headerlink" title="挑战- No Silver Bullet"></a>挑战- No Silver Bullet</h2><ul>
+<li>封闭性</li>
+</ul>
+<p>毫无疑问，「封闭」是远程执行的生命线，无论是增量构建还是远程执行，但是，想要真正做到封闭性并不容易，尤其是对于 C++ 这类语言，大部分 C++ 项目都对本地缓存存在严格的要求，如 gcc 版本，lib 库等等，这些都是封闭性的天敌。如何提供封闭性更好的 rule，以及解决不封闭带来的诸多问题，始终是 Bazel 的重要挑战。</p>
+<ul>
+<li>远程构建</li>
+</ul>
+<p>远程构建是 Bazel 的核心发展目标之一，如果没有远程构建，Bazel 只是一个优秀的构建工具，但远程构建则使得 Bazel 能够发展为支撑企业级别的大型分布式构建系统。但是，必须承认的是，远程构建仍然还在发展阶段，许多问题仍然有待解决。</p>
+<ul>
+<li>规模</li>
+</ul>
+<p>事实上，Bazel 的优势也存在一定的局限性，因为其最初设计目标是为了解决谷歌内部大仓的构建问题，因此天然倾向于大规模、多语言、多维护人员的大型仓库，为了对大仓友好付出了许多其他方面的代价，尽管对于大仓而言，这些代价相较于得到的优势可接受甚至微不足道，但对于普通仓库而言则未必如此。归根结底，这是规模的问题。</p>
+<blockquote>
+<p>2020年，有 issue 要求在 k8s 项目中移除 Bazel (<a href="https://github.com/kubernetes/kubernetes/issues/88553)%EF%BC%8C%E6%AD%A4">https://github.com/kubernetes/kubernetes/issues/88553)，此</a> issue 在社区引发了热烈的讨论，并且最终在 2021 年宣布通过并合入主分支。总结此 issue，核心原因是：</p>
+<p>k8s 本身是单语言（Go）项目，早期引入 Bazel 的是为了使用构建缓存，但 Go 后续支持了构建缓存，此时 Bazel 对于 k8s 而言几乎没有优势，反而会为了维护 Bazel 和 go-build 两套构建工具付出很大的代价。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>tech</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>大厂祛魅</title>
+    <url>/2024/04/19/career-review/</url>
+    <content><![CDATA[<h1 id="大厂祛魅"><a href="#大厂祛魅" class="headerlink" title="大厂祛魅"></a>大厂祛魅</h1><p>我给你写个蛋，程序员都在忙着搞程序呢，哪有人看这破博客～</p>
+]]></content>
+      <categories>
+        <category>daily</category>
       </categories>
   </entry>
   <entry>
@@ -247,46 +256,9 @@ u1s1，这个页面真的好丑。。。但是作为一名业余得不能再业�
       </categories>
   </entry>
   <entry>
-    <title>大厂祛魅</title>
-    <url>/2024/04/19/career-review/</url>
-    <content><![CDATA[<h1 id="大厂祛魅"><a href="#大厂祛魅" class="headerlink" title="大厂祛魅"></a>大厂祛魅</h1><p>我给你写个蛋，程序员都在忙着搞程序呢，哪有人看这破博客～</p>
-]]></content>
-      <categories>
-        <category>daily</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>hello-world</title>
-    <url>/2024/01/25/hello-world/</url>
-    <content><![CDATA[<h1 id="Hyphen"><a href="#Hyphen" class="headerlink" title="Hyphen"></a>Hyphen</h1><p>This is a Hello World page</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;Hello Wolrd!&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>tech</category>
-      </categories>
-  </entry>
-  <entry>
     <title>go-inline-perf</title>
     <url>/2024/03/22/go-inline-perf/</url>
     <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Only For Hyphen</title>
-    <url>/2018/06/08/i-am-not-hyphen/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="6ce60adba2742e5bb1acd9d30cafd6094a5e2746d02304b10db265966dcdadd8">e1aecaa9679ea589ee3f9bead93b3b3f9ef65ab744575e3d95bfcb0b6f9489dbfaabc2dd7e6991127a0b6094f0eb2d7aed554915ebea21dee1962387031a296dc57fa670b85e8750016005d408c34a122ccbdad73dafd21406c7fa8ac830a95b8f31ba6e12a36bd1c40f718c7c88ff9497feebd93c721e0e2e6e7a0e3da17f6277c798238c5d7f795aa8d21106cf8c10544a32ff4115a11b33c6c566a069d7fe5d0ed1a2594fe11091eb16e4daf360814e6f2e175ede437265160120f541b33e84e205625c0ff63240cfaa9c96156fb402d048fd78f043e84b737afb6f8b59f0b988fb77d71ef488b8f023cfc63788d37172a3ea16886b4b79a7c4d199ebc42b5e18fd0f401bdfb830cdd1f488c0a972c2251afd2baf891ec1152b14e9b77c3e485382ffade4fc11709466ac2dfec5a0a57da30844642bde7ff7be5a4d75629fc372f60030952cf5a9e4b6378f82dee7127825ad59817cb73daebbf3265d00dba0d2812ea88504a278f9e7b7b7510bb05a90844941da8e2d0e93e2d418b43bd009a6e9c3e69a7da2dac1c73179fbc8b6411dc993109a466e5bafe8a70f78011900ac16e8492d1d144e4c1316f21d19dc1265c1e2b56f29820a2a47aa167fc37cf34931f00d5db10f51091153b79eae03b8b4dfdb5de6c1fd18ea7912be212631d577efd18bde93b5d788936b0d628243a060ea746da344c39b9da95d611a11dc847a288b8352c915f0aa56a2d452af32b38457051b93a5af0043f4ef084c3303dc231820cd2fc8e591e37c6ff5ff8e6a555abf78648d6e02da05d00f197ba119060dc5f24db199a35c28ff2507e57c7a4324c121aff68deae53e048d7757b9b47be79a4a7db26f4d1780571200d35af87b9044bb52ad4a1c17244b0ca84548e780e2be15a518986ba32a8de70d016f1c80f538d305fb71a4acc14261e34f9d890796518581df3f570c90bdc40290bbe8dd0d9535cc51decb05c65b87ed6ab0ae0581b9ffbc5474ac7f1c53cefbf01a02bc168ec696f81b4e9c11146a115ef45f97749d5ba30a4bc05bbab03f9f1dd599100b8d3f2b6921cd077353ea47535d76eefd82099b4490d06c704d5d4d0a64e920d97630411f7583e0d3da9cde8c63a5d0db792792811a6866792f272697f042c3c44d4645fb2aef848a2c0bf28dd245d4c95187f961cb2b6d341fbf02059a5b1becf3fe832f6967cb0cca2f4b00864aa061d7f75e230243cac402186d5479efc7c913a2e784cd40f3d3bdc15c9c3652ac5d501bf3acbead6762b2929ab53cffabd9fc31b40b0e8f96a5df52ed48746e66527ce304185525f37b661467a04e4f4e824e74f823a3ae13b4cd648840d14a8a7f4f0afbd41ab145415ed8d0798b48dc1805148519d2f32e4fc1fff24fc0fc4421300956500d552dee0a06382f6b08f21e1d76fbc6d0e06ac4ed9d11dd60d5f6b62d3423b8e22b8f3f233ce56d466d5432ef084e1ace5975d90e13952f99ae028da221aec5b4b8c4ec2507a634ce216acd0ef1dc78da5787642532479e018a10a0d348970e46b26567ff00f687590032441acb85e5a8ad368dc664c98d3dcda586605521024fffe8035ff17b28f649b7daf5fe75d26beba44e11ecc5d3ba4eec27e9344dc5839142f04b371d38fc7de6ab566b5d29a054d4ef37cb92af237f30ccc6b0199024029951d1c2c29ae331ad71bf7c12501f676d91dbd3afa5f46c000acc62805fb80a1a0e29af876b1a92887582cf930ba81a671f815e85b0136df34dd54bd6d3af229a5acfbeb118b705d54dc263c5a7a8814ddd281f77c7238389029487f55990694b990d3562506ccdd9242d394dc55261c901b3e2e05bf68252dd1cc46b2735c89bc774186509b4e1e0d0fb90e281b8a64980d3cdf9f0d24488283487e83beb7b24d214e57956f019a9c2ba2c5e1454110f72d94958fc71d2be8ea63f40a2b54594ee0004683e1da30531f2733e227c069efc34add0bd66827bd39105a0d37312b6d448d9e4160ae1a2dc61eb4c447ab01488a42f26a9b3b5fb1abe3062d9670009ea59a3f45febeb150abe155d5a8863fa0413632acd19800463df52c327c17c8151bfe8f2de30c985cdba6f848ec020a2d32f154292170fa38a4b3b554bf36b1af5b01a16f682f0ae6dfe7155d6913391c70f0fad9e8ba4b4e75df011e99597fb7ec40d3a7a964059b21170c1d6be2d434316446c475a7dd85d42a4647665e0adcc552b4905f31ae9e4f330631deb42ea0f571f2174006173c529631f535fbdfa492410d360f37eb2cef18f98619ca88a09631f2e74bd6466c751b8453ee6df3b45ea134c6ca0cb774c18021da7c561eaa7ec8087d02d3df0ef256de503188145b1cb7344afe12792832162369713767b2eabf900d8132b03dc1356137d90422aa4ebef3d76744b2573c6e1b62008f8dfb26d499987fc20a8c1f0d46505cb86320488fb729a11065751cb473d59ed2d12536e108c2922b84c2521241fcca1e5580873a12562bc768f2fb11fa06d6ab677f8c95788875e1eb9d1ba7339c0c11b262afcb4cf5fb47087036892a04c9c848bc2f24bbc14d43106f9747b9eccee8d4b1df53e5e3b4ffbc6c5d04f7327d65965e81ef3df162974925622f1dbb1984a21680c4da09daf3d86a8cf79972442137df8e8cded0ce7d8d0309345508df8438281b2cc8951be6bffdaa71339ea7c02065d42d444be5f4511349cd368d93a4028ce2fb9ffb429d1f3efc2fc636a9f3b0e7b28d2f6e8f3c3a526672597ccc411f79f30c60bbfc3e81f67a8f65926beedd6b4b8f78bbeb1b922bc6f6305818fe63e4d84af83028d3c93414b7f99e01b5dfd3252ac1213e783804d7a86bc20eb8fe30a62d26b7eb69963e7b03e0875256612799d0d2dcb0b058542766216f1d17d7c78556a1456f381cf33519e4f376bfdf77c2de67e14d1517245d5ad7ab31a43502457c5dc568536e2460e2ea881fbbb784ac418355ced57b1b42db0fc0a9d45a5a4e4fac89f51363fa994e50c2ba5afda2c9ebc2cd499f3a06cb1f78aeddde46e1f3f9d920e558e5055315bf994e2513f21084c86e570a3f489f4f0ec3e4db73587f69bb7260a11cae10dae78904ef256d2468734aaf4755e68899efc749165c47623b7bfc02a801f28f22c577363e3018acbc66216eaed68f7f0b285d36360d0874c4fc837caa0db8f4ea3a69413d2e1e284c6b75949db653269c131f01e9195b6e6ccb525868e85221b379da749232098dcf036e040307358137c208fded98a26e00747ce6a05257d8e813360cc5335f896dd3e8df37796f3eca024e62336992a73fa43dcaae054d2ffc55a0d75401bce06bdcf8db16a064194fd7f53da9ca8294524f3d5ef8a654c93c4506ec027513792eaaa2f8a2312d496a84de0916e92278472d66a8e265a11f21a23147ed6c37692a48805e57e9326c0f3d04b50a8b7019434d93e98e0df60804f1834077d7e93a3a32a8b419535be806f3c0a23e2e4db716fa435a099b30bf1c207ad20fe8156989d7bf162159a9857b3e9b5e59df15ffb64b07377e95fcf580db7dfa103917c475189c251cd605727324abb0fb3dc6282e28778c222fcde418d9aef8047c314fe063aa58e5d6872e9ba1ef1ccb0a860a7d8be5dcc06a02c84fed268016c666f25662030db0fcd5e231d786c3ab6c985f7ba482b369190f175398e6169dd66d8257b1c408c5143cbc2bbbfabc53cb9c2b030aa7b736ffd300e869c983a76b185f35ba209cc0b202bd7e325e98f9a016caed5569a5891672d75c5c3f67056dea245adf4ad00c6</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-blink">
-      <input class="hbe hbe-input-field hbe-input-field-blink" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-blink" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-blink" data-content="wobuguan">wobuguan</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <categories>
-        <category>self</category>
-      </categories>
   </entry>
   <entry>
     <title>Go Vendor-时代的眼泪</title>
@@ -374,6 +346,34 @@ u1s1，这个页面真的好丑。。。但是作为一名业余得不能再业�
 ]]></content>
       <categories>
         <category>tech</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>hello-world</title>
+    <url>/2024/01/25/hello-world/</url>
+    <content><![CDATA[<h1 id="Hyphen"><a href="#Hyphen" class="headerlink" title="Hyphen"></a>Hyphen</h1><p>This is a Hello World page</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;Hello Wolrd!&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>tech</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Only For Hyphen</title>
+    <url>/2018/06/08/i-am-not-hyphen/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="6ce60adba2742e5bb1acd9d30cafd6094a5e2746d02304b10db265966dcdadd8">e1aecaa9679ea589ee3f9bead93b3b3f9ef65ab744575e3d95bfcb0b6f9489dbfaabc2dd7e6991127a0b6094f0eb2d7aed554915ebea21dee1962387031a296dc57fa670b85e8750016005d408c34a122ccbdad73dafd21406c7fa8ac830a95b8f31ba6e12a36bd1c40f718c7c88ff9497feebd93c721e0e2e6e7a0e3da17f6277c798238c5d7f795aa8d21106cf8c10544a32ff4115a11b33c6c566a069d7fe5d0ed1a2594fe11091eb16e4daf360814e6f2e175ede437265160120f541b33e84e205625c0ff63240cfaa9c96156fb402d048fd78f043e84b737afb6f8b59f0b988fb77d71ef488b8f023cfc63788d37172a3ea16886b4b79a7c4d199ebc42b5e18fd0f401bdfb830cdd1f488c0a972c2251afd2baf891ec1152b14e9b77c3e485382ffade4fc11709466ac2dfec5a0a57da30844642bde7ff7be5a4d75629fc372f60030952cf5a9e4b6378f82dee7127825ad59817cb73daebbf3265d00dba0d2812ea88504a278f9e7b7b7510bb05a90844941da8e2d0e93e2d418b43bd009a6e9c3e69a7da2dac1c73179fbc8b6411dc993109a466e5bafe8a70f78011900ac16e8492d1d144e4c1316f21d19dc1265c1e2b56f29820a2a47aa167fc37cf34931f00d5db10f51091153b79eae03b8b4dfdb5de6c1fd18ea7912be212631d577efd18bde93b5d788936b0d628243a060ea746da344c39b9da95d611a11dc847a288b8352c915f0aa56a2d452af32b38457051b93a5af0043f4ef084c3303dc231820cd2fc8e591e37c6ff5ff8e6a555abf78648d6e02da05d00f197ba119060dc5f24db199a35c28ff2507e57c7a4324c121aff68deae53e048d7757b9b47be79a4a7db26f4d1780571200d35af87b9044bb52ad4a1c17244b0ca84548e780e2be15a518986ba32a8de70d016f1c80f538d305fb71a4acc14261e34f9d890796518581df3f570c90bdc40290bbe8dd0d9535cc51decb05c65b87ed6ab0ae0581b9ffbc5474ac7f1c53cefbf01a02bc168ec696f81b4e9c11146a115ef45f97749d5ba30a4bc05bbab03f9f1dd599100b8d3f2b6921cd077353ea47535d76eefd82099b4490d06c704d5d4d0a64e920d97630411f7583e0d3da9cde8c63a5d0db792792811a6866792f272697f042c3c44d4645fb2aef848a2c0bf28dd245d4c95187f961cb2b6d341fbf02059a5b1becf3fe832f6967cb0cca2f4b00864aa061d7f75e230243cac402186d5479efc7c913a2e784cd40f3d3bdc15c9c3652ac5d501bf3acbead6762b2929ab53cffabd9fc31b40b0e8f96a5df52ed48746e66527ce304185525f37b661467a04e4f4e824e74f823a3ae13b4cd648840d14a8a7f4f0afbd41ab145415ed8d0798b48dc1805148519d2f32e4fc1fff24fc0fc4421300956500d552dee0a06382f6b08f21e1d76fbc6d0e06ac4ed9d11dd60d5f6b62d3423b8e22b8f3f233ce56d466d5432ef084e1ace5975d90e13952f99ae028da221aec5b4b8c4ec2507a634ce216acd0ef1dc78da5787642532479e018a10a0d348970e46b26567ff00f687590032441acb85e5a8ad368dc664c98d3dcda586605521024fffe8035ff17b28f649b7daf5fe75d26beba44e11ecc5d3ba4eec27e9344dc5839142f04b371d38fc7de6ab566b5d29a054d4ef37cb92af237f30ccc6b0199024029951d1c2c29ae331ad71bf7c12501f676d91dbd3afa5f46c000acc62805fb80a1a0e29af876b1a92887582cf930ba81a671f815e85b0136df34dd54bd6d3af229a5acfbeb118b705d54dc263c5a7a8814ddd281f77c7238389029487f55990694b990d3562506ccdd9242d394dc55261c901b3e2e05bf68252dd1cc46b2735c89bc774186509b4e1e0d0fb90e281b8a64980d3cdf9f0d24488283487e83beb7b24d214e57956f019a9c2ba2c5e1454110f72d94958fc71d2be8ea63f40a2b54594ee0004683e1da30531f2733e227c069efc34add0bd66827bd39105a0d37312b6d448d9e4160ae1a2dc61eb4c447ab01488a42f26a9b3b5fb1abe3062d9670009ea59a3f45febeb150abe155d5a8863fa0413632acd19800463df52c327c17c8151bfe8f2de30c985cdba6f848ec020a2d32f154292170fa38a4b3b554bf36b1af5b01a16f682f0ae6dfe7155d6913391c70f0fad9e8ba4b4e75df011e99597fb7ec40d3a7a964059b21170c1d6be2d434316446c475a7dd85d42a4647665e0adcc552b4905f31ae9e4f330631deb42ea0f571f2174006173c529631f535fbdfa492410d360f37eb2cef18f98619ca88a09631f2e74bd6466c751b8453ee6df3b45ea134c6ca0cb774c18021da7c561eaa7ec8087d02d3df0ef256de503188145b1cb7344afe12792832162369713767b2eabf900d8132b03dc1356137d90422aa4ebef3d76744b2573c6e1b62008f8dfb26d499987fc20a8c1f0d46505cb86320488fb729a11065751cb473d59ed2d12536e108c2922b84c2521241fcca1e5580873a12562bc768f2fb11fa06d6ab677f8c95788875e1eb9d1ba7339c0c11b262afcb4cf5fb47087036892a04c9c848bc2f24bbc14d43106f9747b9eccee8d4b1df53e5e3b4ffbc6c5d04f7327d65965e81ef3df162974925622f1dbb1984a21680c4da09daf3d86a8cf79972442137df8e8cded0ce7d8d0309345508df8438281b2cc8951be6bffdaa71339ea7c02065d42d444be5f4511349cd368d93a4028ce2fb9ffb429d1f3efc2fc636a9f3b0e7b28d2f6e8f3c3a526672597ccc411f79f30c60bbfc3e81f67a8f65926beedd6b4b8f78bbeb1b922bc6f6305818fe63e4d84af83028d3c93414b7f99e01b5dfd3252ac1213e783804d7a86bc20eb8fe30a62d26b7eb69963e7b03e0875256612799d0d2dcb0b058542766216f1d17d7c78556a1456f381cf33519e4f376bfdf77c2de67e14d1517245d5ad7ab31a43502457c5dc568536e2460e2ea881fbbb784ac418355ced57b1b42db0fc0a9d45a5a4e4fac89f51363fa994e50c2ba5afda2c9ebc2cd499f3a06cb1f78aeddde46e1f3f9d920e558e5055315bf994e2513f21084c86e570a3f489f4f0ec3e4db73587f69bb7260a11cae10dae78904ef256d2468734aaf4755e68899efc749165c47623b7bfc02a801f28f22c577363e3018acbc66216eaed68f7f0b285d36360d0874c4fc837caa0db8f4ea3a69413d2e1e284c6b75949db653269c131f01e9195b6e6ccb525868e85221b379da749232098dcf036e040307358137c208fded98a26e00747ce6a05257d8e813360cc5335f896dd3e8df37796f3eca024e62336992a73fa43dcaae054d2ffc55a0d75401bce06bdcf8db16a064194fd7f53da9ca8294524f3d5ef8a654c93c4506ec027513792eaaa2f8a2312d496a84de0916e92278472d66a8e265a11f21a23147ed6c37692a48805e57e9326c0f3d04b50a8b7019434d93e98e0df60804f1834077d7e93a3a32a8b419535be806f3c0a23e2e4db716fa435a099b30bf1c207ad20fe8156989d7bf162159a9857b3e9b5e59df15ffb64b07377e95fcf580db7dfa103917c475189c251cd605727324abb0fb3dc6282e28778c222fcde418d9aef8047c314fe063aa58e5d6872e9ba1ef1ccb0a860a7d8be5dcc06a02c84fed268016c666f25662030db0fcd5e231d786c3ab6c985f7ba482b369190f175398e6169dd66d8257b1c408c5143cbc2bbbfabc53cb9c2b030aa7b736ffd300e869c983a76b185f35ba209cc0b202bd7e325e98f9a016caed5569a5891672d75c5c3f67056dea245adf4ad00c6</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-blink">
+      <input class="hbe hbe-input-field hbe-input-field-blink" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-blink" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-blink" data-content="wobuguan">wobuguan</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>self</category>
       </categories>
   </entry>
   <entry>
