@@ -24,18 +24,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Here is 2026</title>
-    <url>/2026/01/01/Here-is-2026/</url>
-    <content><![CDATA[<p>2025年看了一些杂七杂八的书，大乘的中论，六祖坛经，上座部的巴利三藏也读了一些，甚至看了少许密宗讲义。</p>
-<p>然而终究既未能观照到诸法皆空，也不尝体悟过心本空寂；一面向往着离一切诸相的空空如也，另一面又深陷在尘世俗务泥沼般的有为虚相。</p>
-<p>心中诸多苦闷疑惑，无处可说，也无人可答。</p>
-<p>那么，世尊所说的paramita，究竟要如何才能寻到呢？</p>
-]]></content>
-      <categories>
-        <category>daily</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Go GC 调优思路</title>
     <url>/2024/03/07/Go-GC-%E8%B0%83%E4%BC%98/</url>
     <content><![CDATA[<h1 id="面向高性能的-Go-GC-调优思路"><a href="#面向高性能的-Go-GC-调优思路" class="headerlink" title="面向高性能的 Go GC 调优思路"></a>面向高性能的 Go GC 调优思路</h1><h2 id="0"><a href="#0" class="headerlink" title="0"></a>0</h2><p>最简单的优化思路是别浪费时间优化了，转 Rust，R 门！</p>
@@ -115,6 +103,18 @@
       </categories>
   </entry>
   <entry>
+    <title>Here is 2026</title>
+    <url>/2026/01/01/Here-is-2026/</url>
+    <content><![CDATA[<p>2025年看了一些杂七杂八的书，大乘的中论，六祖坛经，上座部的巴利三藏也读了一些，甚至看了少许密宗讲义。</p>
+<p>然而终究既未能观照到诸法皆空，也不尝体悟过心本空寂；一面向往着离一切诸相的空空如也，另一面又深陷在尘世俗务泥沼般的有为虚相。</p>
+<p>心中诸多苦闷疑惑，无处可说，也无人可答。</p>
+<p>那么，世尊所说的paramita，究竟要如何才能寻到呢？</p>
+]]></content>
+      <categories>
+        <category>daily</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Bazel-Next Generation of Build?</title>
     <url>/2024/04/22/bazel-1/</url>
     <content><![CDATA[<h1 id="Bazel-Next-Generation-of-Build"><a href="#Bazel-Next-Generation-of-Build" class="headerlink" title="Bazel: Next Generation of Build?"></a>Bazel: Next Generation of Build?</h1><h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>Bazel 是 Google 开源的一款与 Make、Maven 和 Gradle 类似的开源构建和测试工具， 它使用人类可读的高级构建语言 Starlark，支持多种语言，可为多个平台构建输出。 Bazel 支持任意大小的构建目标，并支持跨多个代码库和大量用户的大型代码库，是 Google 主推的一种构建工具。</p>
@@ -187,7 +187,9 @@
   <entry>
     <title>一些碎碎念</title>
     <url>/1999/10/01/fragment/</url>
-    <content><![CDATA[<div class="fragment-timeline"><div class="fragment-year-section"><div class="fragment-year-label"><span>2024</span></div><div class="fragment-items"><div class="fragment-item"><div class="fragment-dot"></div><div class="fragment-date">12-26</div><div class="fragment-content"><p>钢铁的领袖已经逝去，领袖的钢铁必将永存</p>
+    <content><![CDATA[<div class="fragment-timeline"><div class="fragment-year-section"><div class="fragment-year-label"><span>2026</span></div><div class="fragment-items"><div class="fragment-item"><div class="fragment-dot"></div><div class="fragment-date">03-11</div><div class="fragment-content"><p>重新写了时间轴前端，舒服多了，无敌～</p>
+</div></div><div class="fragment-item"><div class="fragment-dot"></div><div class="fragment-date">03-10</div><div class="fragment-content"><p>Bye my beloved mt.</p>
+</div></div></div></div><div class="fragment-year-section"><div class="fragment-year-label"><span>2024</span></div><div class="fragment-items"><div class="fragment-item"><div class="fragment-dot"></div><div class="fragment-date">12-26</div><div class="fragment-content"><p>钢铁的领袖已经逝去，领袖的钢铁必将永存</p>
 </div></div><div class="fragment-item"><div class="fragment-dot"></div><div class="fragment-date">12-16</div><div class="fragment-content"><p>上班无聊-&gt;刷每日一题-&gt;打开leetcode-&gt;发现hard-&gt;再见👋</p>
 </div></div><div class="fragment-item"><div class="fragment-dot"></div><div class="fragment-date">12-10</div><div class="fragment-content"><p>今年的储蓄计划彻底破产，分币不剩，严重超支，烦死了</p>
 </div></div><div class="fragment-item"><div class="fragment-dot"></div><div class="fragment-date">12-10</div><div class="fragment-content"><p>装修真的好麻烦啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊。<br>身边的每个朋友都在说，我装出来的房子没有家的感觉，太冷了。<br>可是我也不知道到底什么是家的感觉，毕竟从 9 岁开始，就一直住在宿舍了。<br>😊</p>
@@ -226,6 +228,15 @@
     <title>go-inline-perf</title>
     <url>/2024/03/22/go-inline-perf/</url>
     <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>hello-world</title>
+    <url>/2024/01/25/hello-world/</url>
+    <content><![CDATA[<h1 id="Hyphen"><a href="#Hyphen" class="headerlink" title="Hyphen"></a>Hyphen</h1><p>This is a Hello World page</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;Hello Wolrd!&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>tech</category>
+      </categories>
   </entry>
   <entry>
     <title>Go Vendor-时代的眼泪</title>
@@ -311,15 +322,6 @@
 <p>不过，govendor 由于已经不再维护了，因此其在 M 系列芯片的 Mac 上不可用，而且也不清楚高版本 Go 的兼容性。</p>
 <p>由于工作项目需要使用 govendor，因此我复制了一份代码，处理了部分兼容性问题，目前在我本地（Mac M2）看起来没啥问题。地址：<a href="https://github.com/hyphennn/govendor">https://github.com/hyphennn/govendor</a> 。但不清楚有没有未知问题。<br>ps. 之所以不 fork，是因为原项目不再维护了，fork 没有任何意义。</p>
 ]]></content>
-      <categories>
-        <category>tech</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>hello-world</title>
-    <url>/2024/01/25/hello-world/</url>
-    <content><![CDATA[<h1 id="Hyphen"><a href="#Hyphen" class="headerlink" title="Hyphen"></a>Hyphen</h1><p>This is a Hello World page</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;Hello Wolrd!&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>tech</category>
       </categories>
