@@ -1,0 +1,277 @@
+/* ============================================
+   Fragment Timeline - 碎碎念时间轴样式
+   简约、优雅的左侧时间轴设计
+   支持 Fluid 主题亮色/暗色模式
+   ============================================ */
+
+/* 容器 */
+.fragment-timeline {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem 0 2rem;
+}
+
+/* ---- 年份标签 ---- */
+.fragment-year-section {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.fragment-year-label {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding-left: 52px;
+}
+
+.fragment-year-label span {
+  display: inline-block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #1a202c;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  padding: 4px 0;
+}
+
+/* ---- 时间线轴线 ---- */
+.fragment-items {
+  position: relative;
+  padding-left: 52px;
+}
+
+.fragment-items::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #e2e8f0, #cbd5e0);
+  border-radius: 1px;
+}
+
+/* ---- 单条内容 ---- */
+.fragment-item {
+  position: relative;
+  margin-bottom: 2rem;
+  animation: fragmentFadeIn 0.4s ease-out both;
+}
+
+/* 圆点 */
+.fragment-dot {
+  position: absolute;
+  left: -39px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #667eea;
+  z-index: 1;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.fragment-item:hover .fragment-dot {
+  background: #667eea;
+  box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.2);
+  transform: scale(1.2);
+}
+
+/* 日期 */
+.fragment-date {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #8e99a4;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+}
+
+/* 内容卡片 */
+.fragment-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: #4a5568;
+  border: 1px solid #edf2f7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  word-break: break-word;
+}
+
+.fragment-content:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+.fragment-content p {
+  margin: 0;
+  line-height: 1.8;
+}
+
+.fragment-content p + p {
+  margin-top: 0.5em;
+}
+
+/* 内容中的链接 */
+.fragment-content a {
+  color: #667eea;
+  text-decoration: none;
+  border-bottom: 1px dashed #667eea;
+  transition: all 0.2s;
+}
+
+.fragment-content a:hover {
+  color: #764ba2;
+  border-bottom-style: solid;
+}
+
+/* 内容中的 emoji 等大号文字保持原样 */
+.fragment-content img.emoji {
+  display: inline;
+  margin: 0 2px;
+  vertical-align: -0.1em;
+}
+
+/* ---- 渐入动画 ---- */
+@keyframes fragmentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fragment-item:nth-child(1) { animation-delay: 0.05s; }
+.fragment-item:nth-child(2) { animation-delay: 0.1s; }
+.fragment-item:nth-child(3) { animation-delay: 0.15s; }
+.fragment-item:nth-child(4) { animation-delay: 0.2s; }
+.fragment-item:nth-child(5) { animation-delay: 0.25s; }
+.fragment-item:nth-child(6) { animation-delay: 0.3s; }
+
+/* ============================================
+   暗色模式适配
+   Fluid 主题使用 html[data-user-color-scheme="dark"]
+   ============================================ */
+
+html[data-user-color-scheme="dark"] .fragment-year-label span {
+  background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html[data-user-color-scheme="dark"] .fragment-items::before {
+  background: linear-gradient(to bottom, #3a4553, #2d3748);
+}
+
+html[data-user-color-scheme="dark"] .fragment-dot {
+  background: #252d38;
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+}
+
+html[data-user-color-scheme="dark"] .fragment-item:hover .fragment-dot {
+  background: #a78bfa;
+  box-shadow: 0 0 0 5px rgba(167, 139, 250, 0.25);
+}
+
+html[data-user-color-scheme="dark"] .fragment-date {
+  color: #8899aa;
+}
+
+html[data-user-color-scheme="dark"] .fragment-content {
+  background: #2a3444;
+  border-color: #374152;
+  color: #c9cdd4;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+html[data-user-color-scheme="dark"] .fragment-content:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  border-color: #475569;
+}
+
+html[data-user-color-scheme="dark"] .fragment-content a {
+  color: #a78bfa;
+  border-bottom-color: #a78bfa;
+}
+
+html[data-user-color-scheme="dark"] .fragment-content a:hover {
+  color: #c084fc;
+}
+
+/* ============================================
+   响应式适配
+   ============================================ */
+
+@media (max-width: 768px) {
+  .fragment-timeline {
+    padding: 0.5rem 0 1.5rem;
+  }
+
+  .fragment-year-label {
+    padding-left: 42px;
+  }
+
+  .fragment-items {
+    padding-left: 42px;
+  }
+
+  .fragment-items::before {
+    left: 15px;
+  }
+
+  .fragment-dot {
+    left: -33px;
+    width: 10px;
+    height: 10px;
+    border-width: 2.5px;
+  }
+
+  .fragment-content {
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 10px;
+  }
+
+  .fragment-year-label span {
+    font-size: 1.1rem;
+  }
+
+  .fragment-date {
+    font-size: 0.75rem;
+  }
+}
+
+/* ---- 去除 markdown-body 对内部样式的干扰 ---- */
+.markdown-body .fragment-timeline h2 {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body .fragment-timeline {
+  font-size: inherit;
+}
+
+.markdown-body .fragment-content p:first-child {
+  margin-top: 0;
+}
+
+.markdown-body .fragment-content p:last-child {
+  margin-bottom: 0;
+}
+
